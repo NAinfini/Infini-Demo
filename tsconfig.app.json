@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "target": "ES2022",
+    "useDefineForClassFields": true,
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "types": ["vite/client"],
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
+    "paths": {
+      "@infini-dev-kit/backend": ["../Infini-Dev-Kit/backend/index.ts"],
+      "@infini-dev-kit/backend/*": ["../Infini-Dev-Kit/backend/*.ts"],
+      "@infini-dev-kit/frontend": ["../Infini-Dev-Kit/frontend/index.ts"],
+      "@infini-dev-kit/frontend/react": ["../Infini-Dev-Kit/frontend/react/index.ts"],
+      "@infini-dev-kit/frontend/react/*": ["../Infini-Dev-Kit/frontend/react/*"],
+      "@infini-dev-kit/frontend/*": ["../Infini-Dev-Kit/frontend/*"],
+      "@infini-dev-kit/utils": ["../Infini-Dev-Kit/utils/index.ts"],
+      "@infini-dev-kit/utils/*": ["../Infini-Dev-Kit/utils/*"]
+    }
+  },
+  "include": ["src", "../Infini-Dev-Kit/backend", "../Infini-Dev-Kit/frontend", "../Infini-Dev-Kit/utils"],
+  "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx"]
+}

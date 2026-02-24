@@ -1,0 +1,57 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: sans-serif; }
+
+.app-page-shell {
+  transition:
+    background-color 300ms ease,
+    color 300ms ease,
+    border-color 300ms ease,
+    box-shadow 300ms ease;
+}
+
+.app-page-shell.app-motion-off {
+  transition: none !important;
+}
+
+@keyframes app-theme-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes app-theme-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+::view-transition-old(root) {
+  animation: app-theme-fade-out 200ms ease-out both;
+}
+
+::view-transition-new(root) {
+  animation: app-theme-fade-in 300ms ease-in both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--infini-color-primary, #888);
+  border-radius: var(--infini-radius, 4px);
+  opacity: 0.6;
+}
+::-webkit-scrollbar-thumb:hover { opacity: 1; }
+* { scrollbar-width: thin; scrollbar-color: var(--infini-color-primary, #888) transparent; }
