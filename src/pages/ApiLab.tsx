@@ -1,8 +1,17 @@
-import { Alert, Button, Input, Space, Typography } from "antd";
+import { Alert, Group, Text, TextInput } from "@mantine/core";
+import { AnimatePresence, motion as motionUi } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import { ApiClientError, createApiClient } from "@infini-dev-kit/backend";
-
+import { ApiClientError, createApiClient } from "@infini-dev-kit/api-client";
+import { useThemeSnapshot } from "@infini-dev-kit/frontend/provider";
+import {
+  GlitchText,
+  MotionButton,
+  RevealOnScroll,
+  StaggerList,
+} from "@infini-dev-kit/frontend/components";
+import { staggerChild, useThemeTransition } from "@infini-dev-kit/frontend/hooks";
+import { MOCK_API_ENDPOINTS } from "../mocks/handlers";
 import "./ApiLab.css";
 
 type ApiLabLogEntry = {
@@ -19,7 +28,15 @@ type ApiLabLogEntry = {
 
 type TraceInfo = { traceparent?: string; tracestate?: string };
 
-const { Text } = Typography;
+const COVERED_ENDPOINT_IDS = new Set<string>([
+  "users-list",
+  "users-detail",
+  "validate",
+  "protected",
+  "slow",
+  "retry",
+]);
+
 
 function nowTimestamp(): string {
   return new Date().toLocaleTimeString();
@@ -50,13 +67,14 @@ function stringifyPreview(value: unknown): string {
 }
 
 export function ApiLab() {
+  const { state } = useThemeSnapshot();
+  const isCyberpunk = state.themeId === "cyberpunk";
   const [logs, setLogs] = useState<ApiLabLogEntry[]>([]);
-  const [rowEnterIds, setRowEnterIds] = useState<Record<string, true>>({});
   const [selectedUserId, setSelectedUserId] = useState("1");
   const [isRunning, setIsRunning] = useState(false);
   const [traceHint, setTraceHint] = useState<TraceInfo>({});
+  const enterTransition = useThemeTransition("enter");
   const logPanelRef = useRef<HTMLDivElement | null>(null);
-  const rowEnterTimersRef = useRef<Record<string, number>>({});
 
   const client = useMemo(
     () =>
@@ -79,12 +97,21 @@ export function ApiLab() {
     logPanelRef.current.scrollTop = logPanelRef.current.scrollHeight;
   }, [logs.length]);
 
-  useEffect(() => {
-    return () => {
-      Object.values(rowEnterTimersRef.current).forEach((timerId) => window.clearTimeout(timerId));
-      rowEnterTimersRef.current = {};
-    };
-  }, []);
+  const endpointRows = useMemo(
+    () =>
+      MOCK_API_ENDPOINTS.map((endpoint) => ({
+        ...endpoint,
+        included: COVERED_ENDPOINT_IDS.has(endpoint.id),
+      })),
+    [],
+  );
+
+  const missingEndpointRows = useMemo(
+    () => endpointRows.filter((endpoint) => !endpoint.included),
+    [endpointRows],
+  );
+
+  const includedCount = endpointRows.length - missingEndpointRows.length;
 
   function appendLog(entry: Omit<ApiLabLogEntry, "id" | "timestamp">): void {
     const id = makeLogId();
@@ -94,21 +121,6 @@ export function ApiLab() {
       timestamp: nowTimestamp(),
     };
     setLogs((prev) => [...prev.slice(-79), next]);
-    setRowEnterIds((prev) => ({ ...prev, [id]: true }));
-
-    const timerId = window.setTimeout(() => {
-      setRowEnterIds((prev) => {
-        if (!(id in prev)) {
-          return prev;
-        }
-        const nextIds = { ...prev };
-        delete nextIds[id];
-        return nextIds;
-      });
-      delete rowEnterTimersRef.current[id];
-    }, 360);
-
-    rowEnterTimersRef.current[id] = timerId;
   }
 
   async function runAction<T>(options: {
@@ -117,8 +129,11 @@ export function ApiLab() {
     url: string;
     successStatus?: number;
     action: () => Promise<T>;
-  }): Promise<void> {
-    setIsRunning(true);
+  }, runOptions?: { manageLoading?: boolean }): Promise<void> {
+    const manageLoading = runOptions?.manageLoading ?? true;
+    if (manageLoading) {
+      setIsRunning(true);
+    }
     const started = performance.now();
     try {
       const result = await options.action();
@@ -158,197 +173,342 @@ export function ApiLab() {
         });
       }
     } finally {
+      if (manageLoading) {
+        setIsRunning(false);
+      }
+    }
+  }
+
+  type RunOptions = { manageLoading?: boolean };
+
+  function runFetchUsers(runOptions?: RunOptions): Promise<void> {
+    return runAction({
+      label: "Fetch Users",
+      method: "GET",
+      url: "/api/users",
+      action: () => client.request({ method: "GET", path: "/users" }),
+    }, runOptions);
+  }
+
+  function runFetchUserDetail(userId = selectedUserId, runOptions?: RunOptions): Promise<void> {
+    return runAction({
+      label: "Fetch User Detail",
+      method: "GET",
+      url: `/api/users/${userId}`,
+      action: () =>
+        client.request({
+          method: "GET",
+          path: "/users/:id",
+          pathParams: { id: userId },
+        }),
+    }, runOptions);
+  }
+
+  function runValidationError(runOptions?: RunOptions): Promise<void> {
+    return runAction({
+      label: "Validation Error",
+      method: "POST",
+      url: "/api/validate",
+      action: () =>
+        client.request({
+          method: "POST",
+          path: "/validate",
+          body: { email: "", name: "" },
+        }),
+    }, runOptions);
+  }
+
+  function runAuthError(runOptions?: RunOptions): Promise<void> {
+    return runAction({
+      label: "Auth Error",
+      method: "GET",
+      url: "/api/protected",
+      action: () =>
+        client.request({
+          method: "GET",
+          path: "/protected",
+          requiresAuth: true,
+        }),
+    }, runOptions);
+  }
+
+  function runTimeoutDemo(runOptions?: RunOptions): Promise<void> {
+    return runAction({
+      label: "Timeout",
+      method: "GET",
+      url: "/api/slow",
+      action: () =>
+        client.request({
+          method: "GET",
+          path: "/slow",
+          timeoutMs: 2000,
+        }),
+    }, runOptions);
+  }
+
+  function runRetryDemo(runOptions?: RunOptions): Promise<void> {
+    return runAction({
+      label: "Retry",
+      method: "GET",
+      url: "/api/retry",
+      action: () =>
+        client.request({
+          method: "GET",
+          path: "/retry",
+          retry: {
+            retries: 1,
+            baseDelayMs: 100,
+            jitterMs: 0,
+            maxDelayMs: 1200,
+            retryMethods: ["GET", "HEAD"],
+          },
+        }),
+    }, runOptions);
+  }
+
+  async function runAllEndpoints(): Promise<void> {
+    const userId = selectedUserId.trim() || "1";
+    setIsRunning(true);
+    try {
+      await runFetchUsers({ manageLoading: false });
+      await runFetchUserDetail(userId, { manageLoading: false });
+      await runValidationError({ manageLoading: false });
+      await runAuthError({ manageLoading: false });
+      await runTimeoutDemo({ manageLoading: false });
+      await runRetryDemo({ manageLoading: false });
+    } finally {
       setIsRunning(false);
     }
   }
 
   return (
     <div className="api-lab">
-      <header className="api-lab-header">
-        <h1>API Lab</h1>
-        <p>Live demo for `createApiClient()` with deterministic mock responses via MSW.</p>
-      </header>
+      <RevealOnScroll>
+        <header className="api-lab-header">
+          <h1>{isCyberpunk ? <GlitchText trigger="interval" intensity="medium">Admin Console API Test</GlitchText> : "Admin Console API Test"}</h1>
+          <p>Endpoint test console for `createApiClient()` with deterministic MSW responses and endpoint coverage checks.</p>
+        </header>
+      </RevealOnScroll>
 
       <div className="api-lab-grid">
         <section className="api-lab-panel">
-          <h2>Scenarios</h2>
-          <div className="api-lab-action-grid">
-            <Button
-              className="demo-control-motion"
-              onClick={() =>
-                runAction({
-                  label: "Fetch Users",
-                  method: "GET",
-                  url: "/api/users",
-                  action: () => client.request({ method: "GET", path: "/users" }),
-                })
-              }
-              loading={isRunning}
-            >
-              Fetch Users
-            </Button>
+          <h2>{isCyberpunk ? <GlitchText trigger="hover">Scenarios</GlitchText> : "Scenarios"}</h2>
+          <StaggerList className="api-lab-action-grid" staggerMs={30}>
+            <motionUi.div variants={staggerChild}>
+              <MotionButton
+                className="demo-control-motion"
+                onClick={() => runFetchUsers()}
+                loading={isRunning}
+              >
+                Fetch Users
+              </MotionButton>
+            </motionUi.div>
 
-            <div className="api-lab-user-id">
+            <motionUi.div className="api-lab-user-id" variants={staggerChild}>
               <label htmlFor="api-user-id">User ID:</label>
-              <Input
-                id="api-user-id"
+              <div>
+                <TextInput
+                  id="api-user-id"
+                  className="demo-control-motion"
+                  value={selectedUserId}
+                  onChange={(event) => setSelectedUserId(event.target.value)}
+                  size="xs"
+                  style={{ width: 90 }}
+                />
+              </div>
+              <MotionButton
                 className="demo-control-motion"
-                value={selectedUserId}
-                onChange={(event) => setSelectedUserId(event.target.value)}
                 size="small"
-                style={{ width: 90 }}
-              />
-              <Button
-                className="demo-control-motion"
-                size="small"
-                onClick={() =>
-                  runAction({
-                    label: "Fetch User Detail",
-                    method: "GET",
-                    url: `/api/users/${selectedUserId}`,
-                    action: () =>
-                      client.request({
-                        method: "GET",
-                        path: "/users/:id",
-                        pathParams: { id: selectedUserId },
-                      }),
-                  })
-                }
+                loading={isRunning}
+                onClick={() => runFetchUserDetail()}
               >
                 Run
-              </Button>
+              </MotionButton>
+            </motionUi.div>
+
+            <motionUi.div variants={staggerChild}>
+              <MotionButton
+                className="demo-control-motion"
+                loading={isRunning}
+                onClick={() => runValidationError()}
+              >
+                Validation Error (400)
+              </MotionButton>
+            </motionUi.div>
+
+            <motionUi.div variants={staggerChild}>
+              <MotionButton
+                className="demo-control-motion"
+                loading={isRunning}
+                onClick={() => runAuthError()}
+              >
+                Auth Error (401)
+              </MotionButton>
+            </motionUi.div>
+
+            <motionUi.div variants={staggerChild}>
+              <MotionButton
+                className="demo-control-motion"
+                loading={isRunning}
+                onClick={() => runTimeoutDemo()}
+              >
+                Timeout Demo (2s)
+              </MotionButton>
+            </motionUi.div>
+
+            <motionUi.div variants={staggerChild}>
+              <MotionButton
+                className="demo-control-motion"
+                loading={isRunning}
+                onClick={() => runRetryDemo()}
+              >
+                Retry Demo (429 - 200)
+              </MotionButton>
+            </motionUi.div>
+
+            <motionUi.div variants={staggerChild}>
+              <Group gap={8}>
+                <MotionButton
+                  className="demo-control-motion"
+                  size="small"
+                  loading={isRunning}
+                  onClick={runAllEndpoints}
+                >
+                  Run All Endpoints
+                </MotionButton>
+                <MotionButton
+                  className="demo-control-motion"
+                  size="small"
+                  disabled={isRunning}
+                  onClick={() => {
+                    setLogs([]);
+                  }}
+                >
+                  Clear Logs
+                </MotionButton>
+              </Group>
+            </motionUi.div>
+          </StaggerList>
+
+          <div className="api-lab-coverage">
+            <div className="api-lab-coverage-head">
+              <h3>{isCyberpunk ? <GlitchText trigger="hover">Endpoint Coverage</GlitchText> : "Endpoint Coverage"}</h3>
+              <Text
+                c={missingEndpointRows.length === 0 ? "green.6" : "yellow.8"}
+                size="sm"
+              >
+                {includedCount}/{endpointRows.length} scenarios mapped
+              </Text>
             </div>
 
-            <Button
-              className="demo-control-motion"
-              onClick={() =>
-                runAction({
-                  label: "Validation Error",
-                  method: "POST",
-                  url: "/api/validate",
-                  action: () =>
-                    client.request({
-                      method: "POST",
-                      path: "/validate",
-                      body: { email: "", name: "" },
-                    }),
-                })
-              }
-            >
-              Validation Error (400)
-            </Button>
+            <div className="api-lab-coverage-scroll">
+              <table className="api-lab-coverage-table">
+                <thead>
+                  <tr>
+                    <th>Status</th>
+                    <th>Method</th>
+                    <th>Route</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {endpointRows.map((endpoint) => (
+                    <tr key={endpoint.id}>
+                      <td>
+                        <span className={`api-lab-coverage-chip ${endpoint.included ? "included" : "missing"}`.trim()}>
+                          {endpoint.included ? "included" : "missing"}
+                        </span>
+                      </td>
+                      <td>{endpoint.method}</td>
+                      <td>{endpoint.route}</td>
+                      <td>{endpoint.description}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
-            <Button
-              className="demo-control-motion"
-              onClick={() =>
-                runAction({
-                  label: "Auth Error",
-                  method: "GET",
-                  url: "/api/protected",
-                  action: () =>
-                    client.request({
-                      method: "GET",
-                      path: "/protected",
-                      requiresAuth: true,
-                    }),
-                })
-              }
-            >
-              Auth Error (401)
-            </Button>
-
-            <Button
-              className="demo-control-motion"
-              onClick={() =>
-                runAction({
-                  label: "Timeout",
-                  method: "GET",
-                  url: "/api/slow",
-                  action: () =>
-                    client.request({
-                      method: "GET",
-                      path: "/slow",
-                      timeoutMs: 2000,
-                    }),
-                })
-              }
-            >
-              Timeout Demo (2s)
-            </Button>
-
-            <Button
-              className="demo-control-motion"
-              onClick={() =>
-                runAction({
-                  label: "Retry",
-                  method: "GET",
-                  url: "/api/retry",
-                  action: () =>
-                    client.request({
-                      method: "GET",
-                      path: "/retry",
-                      retry: {
-                        retries: 1,
-                        baseDelayMs: 100,
-                        jitterMs: 0,
-                        maxDelayMs: 1200,
-                        retryMethods: ["GET", "HEAD"],
-                      },
-                    }),
-                })
-              }
-            >
-              Retry Demo (429 - 200)
-            </Button>
-
-            <Space size={8}>
-              <Button
-                className="demo-control-motion"
-                size="small"
-                onClick={() => {
-                  setLogs([]);
-                  setRowEnterIds({});
-                  Object.values(rowEnterTimersRef.current).forEach((timerId) => window.clearTimeout(timerId));
-                  rowEnterTimersRef.current = {};
-                }}
+            {missingEndpointRows.length === 0 ? (
+              <Alert
+                style={{ marginTop: 10 }}
+                color="green"
               >
-                Clear Logs
-              </Button>
-            </Space>
+                All mock API endpoints are included in this test console.
+              </Alert>
+            ) : (
+              <Alert
+                style={{ marginTop: 10 }}
+                color="yellow"
+              >
+                Missing endpoint scenarios: {missingEndpointRows.map((endpoint) => `${endpoint.method} ${endpoint.route}`).join(", ")}
+              </Alert>
+            )}
           </div>
         </section>
 
         <section className="api-lab-panel api-lab-log-panel">
-          <h2>Request Log</h2>
+          <h2>{isCyberpunk ? <GlitchText trigger="hover">Request Log</GlitchText> : "Request Log"}</h2>
           <div className="api-lab-log-meta">
-            <Text type="secondary">Entries: {logs.length}</Text>
-            <Text type="secondary">Current Trace: {traceHint.traceparent?.slice(0, 20) ?? "none"}...</Text>
+            <Text c="dimmed">Entries: {logs.length}</Text>
+            <Text c="dimmed">Current Trace: {traceHint.traceparent?.slice(0, 20) ?? "none"}...</Text>
           </div>
 
           <div className="api-lab-log-scroll" ref={logPanelRef}>
             {logs.length === 0 ? (
               <div className="api-lab-log-empty">No requests yet. Run a scenario to populate this panel.</div>
             ) : (
-              logs.map((entry) => (
-                <article
-                  key={entry.id}
-                  className={`api-lab-log-entry ${entry.level} ${rowEnterIds[entry.id] ? "row-enter" : ""}`.trim()}
-                >
-                  <div className="api-lab-log-line">
-                    <strong>{entry.label}</strong>
-                    <span>{entry.timestamp}</span>
-                  </div>
-                  <div className="api-lab-log-line">
-                    <span>
-                      <span className="api-lab-log-code">{entry.method}</span> {entry.url}
-                    </span>
-                    <span>
-                      <span className="api-lab-log-code">{entry.status}</span> {entry.durationMs}ms
-                    </span>
-                  </div>
-                  <pre className="api-lab-log-detail">{entry.detail}</pre>
-                </article>
-              ))
+              <AnimatePresence initial={false}>
+                {logs.map((entry) => (
+                  <motionUi.article
+                    key={entry.id}
+                    className={`api-lab-log-entry ${entry.level}`.trim()}
+                    initial={
+                      isCyberpunk
+                        ? {
+                            opacity: 0,
+                            x: -16,
+                            clipPath: "inset(0 100% 0 0)",
+                            filter: "brightness(1.5)",
+                          }
+                        : { opacity: 0, x: 12 }
+                    }
+                    animate={
+                      isCyberpunk
+                        ? {
+                            opacity: [0, 1, 0.8, 1],
+                            x: 0,
+                            clipPath: "inset(0 0% 0 0)",
+                            filter: "brightness(1)",
+                          }
+                        : { opacity: 1, x: 0 }
+                    }
+                    exit={
+                      isCyberpunk
+                        ? {
+                            opacity: [1, 0.6, 0],
+                            clipPath: "inset(0 0 0 100%)",
+                            filter: "brightness(1.3)",
+                          }
+                        : { opacity: 0, x: -8 }
+                    }
+                    transition={enterTransition}
+                  >
+                    <div className="api-lab-log-line">
+                      <strong>{entry.label}</strong>
+                      <span>{entry.timestamp}</span>
+                    </div>
+                    <div className="api-lab-log-line">
+                      <span>
+                        <span className="api-lab-log-code">{entry.method}</span> {entry.url}
+                      </span>
+                      <span>
+                        <span className="api-lab-log-code">{entry.status}</span> {entry.durationMs}ms
+                      </span>
+                    </div>
+                    <pre className="api-lab-log-detail">{entry.detail}</pre>
+                  </motionUi.article>
+                ))}
+              </AnimatePresence>
             )}
           </div>
         </section>
@@ -356,10 +516,10 @@ export function ApiLab() {
 
       <Alert
         style={{ marginTop: 16 }}
-        message="Scenarios are deterministic in development mode via MSW handlers."
-        type="info"
-        showIcon
-      />
+        color="infini-primary"
+      >
+        Scenarios are deterministic in development mode via MSW handlers.
+      </Alert>
     </div>
   );
 }

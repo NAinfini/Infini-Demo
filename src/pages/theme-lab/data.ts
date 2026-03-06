@@ -91,9 +91,9 @@ export const COLLAPSE_ITEMS = [
 ];
 
 export const TIMELINE_ITEMS = [
-  { color: "green", children: "Build completed" },
-  { color: "gold", children: "Validation checks running" },
-  { color: "blue", children: "Release queued" },
+  { label: "Build completed", color: "infini-success" },
+  { label: "Validation checks running", color: "infini-warning" },
+  { label: "Release queued", color: "infini-primary" },
 ];
 
 export const DESCRIPTION_ITEMS = [
@@ -123,7 +123,7 @@ export const MENU_ITEMS = [
 export const DEMO_IMAGE_SRC =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='140' viewBox='0 0 240 140'%3E%3Crect width='240' height='140' fill='%23f5f5f5'/%3E%3Crect x='16' y='16' width='208' height='108' rx='8' fill='%23ffffff' stroke='%23000000' stroke-width='2'/%3E%3Ccircle cx='70' cy='58' r='18' fill='%23ff6b6b'/%3E%3Crect x='102' y='44' width='96' height='10' fill='%23ffd93d'/%3E%3Crect x='102' y='62' width='70' height='10' fill='%23c4b5fd'/%3E%3Crect x='32' y='88' width='176' height='16' fill='%23000000' fill-opacity='0.08'/%3E%3C/svg%3E";
 
-export const ZONE_COUNT = 9;
+export const ZONE_COUNT = 10;
 
 export function wcagLabel(ratio: number): { label: string; pass: boolean } {
   if (ratio >= 7) return { label: "AAA", pass: true };

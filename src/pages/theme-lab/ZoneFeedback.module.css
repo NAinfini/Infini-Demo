@@ -1,0 +1,127 @@
+﻿/* ── Tooltip demo row ── */
+.tooltip-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* ── Generic demo button ── */
+.demo-btn {
+  padding: 8px 16px;
+  border-radius: var(--infini-radius, 8px);
+  border: var(--infini-border-width, 1px) solid var(--infini-color-border);
+  background: var(--infini-color-surface-accent, var(--infini-color-surface));
+  color: var(--infini-color-text);
+  font-family: var(--infini-font-body);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color var(--infini-motion-hover, 180ms) var(--infini-motion-easing, ease),
+    border-color var(--infini-motion-hover, 180ms) var(--infini-motion-easing, ease);
+}
+
+.demo-btn:hover {
+  border-color: var(--infini-color-primary);
+}
+
+/* ── Progress rings ── */
+.ring-grid {
+  display: flex;
+  gap: 32px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.ring-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.ring-label {
+  font-size: 12px;
+  font-family: var(--infini-font-body);
+  opacity: 0.65;
+}
+
+/* ── Number tickers ── */
+.ticker-grid {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.ticker-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ticker-label {
+  font-size: 12px;
+  font-family: var(--infini-font-body);
+  opacity: 0.6;
+}
+
+/* ── Skeleton demo ── */
+.skeleton-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+}
+
+.skeleton-sub-label {
+  font-size: 11px;
+  font-family: var(--infini-font-body);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.5;
+  margin-bottom: 10px;
+}
+
+/* ── Result cards ── */
+.result-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.result-card {
+  border-radius: var(--infini-radius, 8px);
+  border: var(--infini-border-width, 1px) solid var(--infini-color-border);
+  background: var(--infini-color-surface);
+  overflow: hidden;
+}
+
+/* ── Statistics ── */
+.stat-grid {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+/* ── Responsive ── */
+@media (max-width: 760px) {
+  .skeleton-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .result-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ring-grid {
+    gap: 20px;
+  }
+
+  .ticker-grid {
+    gap: 24px;
+  }
+
+  .stat-grid {
+    gap: 24px;
+  }
+}
+

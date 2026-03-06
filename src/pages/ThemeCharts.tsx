@@ -11,8 +11,8 @@ import {
 import { CanvasRenderer } from "echarts/renderers";
 import { useEffect, useMemo } from "react";
 
-import { buildEChartsTheme } from "@infini-dev-kit/frontend/echarts-adapter";
-import type { ThemeId } from "@infini-dev-kit/frontend/theme-specs";
+import { buildEChartsTheme } from "@infini-dev-kit/frontend/theme/echarts/echarts-adapter";
+import type { ThemeId } from "@infini-dev-kit/frontend/theme/theme-specs";
 import type { EffectiveMotionMode } from "@infini-dev-kit/utils/motion";
 import type { EChartsOption } from "echarts";
 
@@ -51,6 +51,14 @@ function buildAnimationConfig(motionMode: EffectiveMotionMode): Pick<EChartsOpti
     };
   }
 
+  if (motionMode === "minimum") {
+    return {
+      animation: true,
+      animationDuration: 60,
+      animationDurationUpdate: 60,
+    };
+  }
+
   return {
     animation: true,
     animationDuration: 450,
@@ -68,7 +76,7 @@ export function ThemeCharts({ themeId, motionMode }: ThemeChartsProps) {
   const lineOption = useMemo<EChartsOption>(
     () => ({
       ...animation,
-      tooltip: { trigger: "axis" },
+      tooltip: { trigger: "axis", appendToBody: true },
       legend: { top: 0, data: ["Revenue", "Cost", "Retention"] },
       grid: { top: 48, left: 40, right: 20, bottom: 30 },
       xAxis: {
@@ -89,7 +97,7 @@ export function ThemeCharts({ themeId, motionMode }: ThemeChartsProps) {
   const barOption = useMemo<EChartsOption>(
     () => ({
       ...animation,
-      tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
+      tooltip: { trigger: "axis", axisPointer: { type: "shadow" }, appendToBody: true },
       legend: { top: 0, data: ["North", "South"] },
       grid: { top: 42, left: 40, right: 20, bottom: 30 },
       xAxis: { type: "category", data: ["Q1", "Q2", "Q3", "Q4", "Q5"] },
@@ -105,7 +113,7 @@ export function ThemeCharts({ themeId, motionMode }: ThemeChartsProps) {
   const pieOption = useMemo<EChartsOption>(
     () => ({
       ...animation,
-      tooltip: { trigger: "item" },
+      tooltip: { trigger: "item", appendToBody: true },
       legend: { top: 0 },
       series: [
         {
@@ -129,7 +137,7 @@ export function ThemeCharts({ themeId, motionMode }: ThemeChartsProps) {
   const radarOption = useMemo<EChartsOption>(
     () => ({
       ...animation,
-      tooltip: {},
+      tooltip: { appendToBody: true },
       legend: { top: 0, data: ["Current", "Target"] },
       radar: {
         radius: 64,

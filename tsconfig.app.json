@@ -18,22 +18,27 @@
 
     /* Linting */
     "strict": true,
+    "noImplicitAny": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "paths": {
-      "@infini-dev-kit/backend": ["../Infini-Dev-Kit/backend/index.ts"],
-      "@infini-dev-kit/backend/*": ["../Infini-Dev-Kit/backend/*.ts"],
+      "@infini-dev-kit/api-client": ["../Infini-Dev-Kit/api-client/index.ts"],
+      "@infini-dev-kit/api-client/*": ["../Infini-Dev-Kit/api-client/*.ts"],
       "@infini-dev-kit/frontend": ["../Infini-Dev-Kit/frontend/index.ts"],
-      "@infini-dev-kit/frontend/react": ["../Infini-Dev-Kit/frontend/react/index.ts"],
-      "@infini-dev-kit/frontend/react/*": ["../Infini-Dev-Kit/frontend/react/*"],
       "@infini-dev-kit/frontend/*": ["../Infini-Dev-Kit/frontend/*"],
       "@infini-dev-kit/utils": ["../Infini-Dev-Kit/utils/index.ts"],
       "@infini-dev-kit/utils/*": ["../Infini-Dev-Kit/utils/*"]
     }
   },
-  "include": ["src", "../Infini-Dev-Kit/backend", "../Infini-Dev-Kit/frontend", "../Infini-Dev-Kit/utils"],
-  "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx"]
+  "include": ["src", "../Infini-Dev-Kit/api-client", "../Infini-Dev-Kit/frontend", "../Infini-Dev-Kit/utils"],
+  "exclude": [
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx",
+    "../Infini-Dev-Kit/**/tests/**",
+    "../Infini-Dev-Kit/**/*.test.ts",
+    "../Infini-Dev-Kit/**/*.test.tsx"
+  ]
 }

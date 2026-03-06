@@ -1,0 +1,55 @@
+/* 2-column grid for input showcase cells */
+.input-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+/* Individual input showcase cell */
+.input-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Small label above each input showing its state */
+.input-state-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  opacity: 0.5;
+  font-family: var(--infini-font-display);
+}
+
+/* Normalized base input used inside themed wrappers */
+.bare-input {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  box-sizing: border-box;
+  /* Radius and border supplied inline via theme tokens */
+}
+
+.bare-input::placeholder {
+  opacity: 0.45;
+}
+
+.bare-input:disabled {
+  cursor: not-allowed;
+}
+
+/* Inline error message beneath an input */
+.inline-error {
+  font-size: 12px;
+  padding-left: 2px;
+}
+
+@media (max-width: 760px) {
+  .input-grid {
+    grid-template-columns: 1fr;
+  }
+}

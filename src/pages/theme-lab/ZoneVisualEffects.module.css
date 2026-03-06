@@ -1,0 +1,310 @@
+﻿/* ── Grid: 3-column card layout ── */
+.ve-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+/* ── Individual demo card wrapper ── */
+.ve-card {
+  border: var(--infini-border-width, 1px) solid var(--infini-color-border);
+  border-radius: calc(var(--infini-radius, 8px) * 0.75);
+  background: var(--infini-color-surface);
+  box-shadow: var(--infini-shadow-sm, var(--infini-shadow));
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ve-card-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.65;
+  font-family: var(--infini-font-display);
+}
+
+/* ── InfiniCard row ── */
+.ve-infini-cards-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ve-infini-card {
+  flex: 1 1 80px;
+  min-width: 72px;
+}
+
+.ve-infini-card-body {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ve-infini-card-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  opacity: 0.55;
+  font-family: var(--infini-font-display);
+}
+
+.ve-infini-card-value {
+  font-size: 20px;
+  font-weight: 700;
+  font-family: var(--infini-font-display);
+  line-height: 1;
+}
+
+/* ── HoverCard stage ── */
+.ve-hover-card-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  border: var(--infini-border-width, 1px) dashed var(--infini-color-border);
+  border-radius: calc(var(--infini-radius, 8px) * 0.65);
+}
+
+.ve-hover-trigger {
+  font-size: 13px;
+  cursor: default;
+  padding: 6px 14px;
+  border: var(--infini-border-width, 1px) solid var(--infini-color-border);
+  border-radius: var(--infini-radius, 8px);
+  background: var(--infini-color-surface);
+  font-family: var(--infini-font-display);
+  letter-spacing: 0.02em;
+}
+
+.ve-hover-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 160px;
+}
+
+.ve-hover-content-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  opacity: 0.65;
+  margin-bottom: 2px;
+  font-family: var(--infini-font-display);
+}
+
+.ve-hover-content-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  gap: 12px;
+}
+
+/* ── RevealCard content ── */
+.ve-reveal-base {
+  padding: 28px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  opacity: 0.75;
+}
+
+.ve-reveal-icon {
+  font-size: 20px;
+  opacity: 0.45;
+}
+
+.ve-reveal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 16px;
+}
+
+.ve-reveal-title {
+  font-size: 15px;
+  font-weight: 700;
+  font-family: var(--infini-font-display);
+  letter-spacing: 0.04em;
+}
+
+.ve-reveal-sub {
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+/* ── LayeredCard wrapper ── */
+.ve-layered-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.ve-layer-bg,
+.ve-layer-mid,
+.ve-layer-top {
+  width: 100%;
+  height: 140px;
+}
+
+/* ── GlassEffect stage ── */
+.ve-glass-stage {
+  border-radius: calc(var(--infini-radius, 8px) * 0.75);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+}
+
+.ve-glass-panel {
+  padding: 16px 24px;
+  width: 100%;
+  max-width: 280px;
+}
+
+.ve-glass-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ve-glass-title {
+  font-size: 14px;
+  font-weight: 700;
+  font-family: var(--infini-font-display);
+}
+
+.ve-glass-sub {
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+/* ── GlitchOverlay stage ── */
+.ve-glitch-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 16px;
+  border: var(--infini-border-width, 1px) dashed var(--infini-color-border);
+  border-radius: calc(var(--infini-radius, 8px) * 0.65);
+}
+
+.ve-glitch-target {
+  display: inline-block;
+}
+
+/* ── ImageScanner target ── */
+.ve-scanner-target {
+  min-height: 100px;
+}
+
+/* ── FlipCard ── */
+.ve-flip-stage {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0;
+}
+
+.ve-flip-card {
+  width: 200px;
+  height: 120px;
+}
+
+.ve-flip-face {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 16px;
+}
+
+/* ── Standalone card demos (TiltCard, ChibiCard, etc.) ── */
+.ve-standalone-card {
+  width: 100%;
+}
+
+.ve-standalone-card-body {
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ve-standalone-card-label {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--infini-font-display);
+  letter-spacing: 0.04em;
+}
+
+/* ── AnimatedCodeBlock ── */
+.ve-code-block {
+  width: 100%;
+}
+
+/* ── Backgrounds section ── */
+.ve-bg-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.ve-bg-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.6;
+  margin-bottom: 8px;
+  font-family: var(--infini-font-display);
+}
+
+.ve-bg-container {
+  width: 100%;
+  height: 150px;
+  border-radius: var(--infini-radius, 8px);
+  overflow: hidden;
+  position: relative;
+}
+
+.ve-bubble-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  opacity: 0.6;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ── Responsive ── */
+@media (max-width: 960px) {
+  .ve-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .ve-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ve-bg-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

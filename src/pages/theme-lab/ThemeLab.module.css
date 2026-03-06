@@ -1,0 +1,44 @@
+.theme-lab {
+  padding: 24px;
+  max-width: 960px;
+  margin: 0 auto;
+  transition: background-color var(--infini-motion-enter, 300ms) var(--infini-motion-easing, ease),
+    color var(--infini-motion-enter, 300ms) var(--infini-motion-easing, ease);
+}
+
+.zone {
+  margin-bottom: 48px;
+}
+
+.theme-zone {
+  transition: transform var(--infini-motion-hover, 180ms) var(--infini-motion-easing, ease),
+    opacity var(--infini-motion-hover, 180ms) var(--infini-motion-easing, ease);
+}
+
+.zone:last-child {
+  margin-bottom: 24px;
+}
+
+.zone-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.45;
+  margin-bottom: 12px;
+  font-family: var(--infini-font-display);
+}
+
+@media (max-width: 760px) {
+  .theme-lab {
+    padding: 12px;
+  }
+
+  .zone {
+    margin-bottom: 36px;
+  }
+}
+
+.lab-tabs {
+  margin-top: 32px;
+}

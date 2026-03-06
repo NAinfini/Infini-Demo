@@ -1,5 +1,32 @@
 import { delay, http, HttpResponse } from "msw";
 
+type MockEndpointMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+
+export type MockApiEndpoint = {
+  id: string;
+  method: MockEndpointMethod;
+  route: string;
+  description: string;
+};
+
+const ROUTES = {
+  users: "/api/users",
+  userById: "/api/users/:id",
+  validate: "/api/validate",
+  protected: "/api/protected",
+  slow: "/api/slow",
+  retry: "/api/retry",
+} as const;
+
+export const MOCK_API_ENDPOINTS = [
+  { id: "users-list", method: "GET", route: ROUTES.users, description: "List users" },
+  { id: "users-detail", method: "GET", route: ROUTES.userById, description: "Fetch user by id" },
+  { id: "validate", method: "POST", route: ROUTES.validate, description: "Validate payload and return field errors" },
+  { id: "protected", method: "GET", route: ROUTES.protected, description: "Protected endpoint without auth token" },
+  { id: "slow", method: "GET", route: ROUTES.slow, description: "Slow endpoint for timeout behavior" },
+  { id: "retry", method: "GET", route: ROUTES.retry, description: "Rate-limit endpoint for retry behavior" },
+] as const satisfies readonly MockApiEndpoint[];
+
 const USERS = [
   { id: "1", name: "Alice Chen", role: "Engineer", status: "active" },
   { id: "2", name: "Bob Nakamura", role: "Designer", status: "pending" },
@@ -9,12 +36,12 @@ const USERS = [
 let retryAttemptCount = 0;
 
 export const handlers = [
-  http.get("/api/users", async () => {
+  http.get(ROUTES.users, async () => {
     await delay(140);
     return HttpResponse.json({ users: USERS }, { status: 200 });
   }),
 
-  http.get("/api/users/:id", async ({ params }) => {
+  http.get(ROUTES.userById, async ({ params }) => {
     await delay(100);
     const user = USERS.find((item) => item.id === params.id);
     if (!user) {
@@ -33,7 +60,7 @@ export const handlers = [
     return HttpResponse.json(user, { status: 200 });
   }),
 
-  http.post("/api/validate", async ({ request }) => {
+  http.post(ROUTES.validate, async ({ request }) => {
     const payload = (await request.json().catch(() => ({}))) as {
       email?: string;
       name?: string;
@@ -55,7 +82,7 @@ export const handlers = [
     );
   }),
 
-  http.get("/api/protected", async () => {
+  http.get(ROUTES.protected, async () => {
     await delay(90);
     return HttpResponse.json(
       {
@@ -69,7 +96,7 @@ export const handlers = [
     );
   }),
 
-  http.get("/api/slow", async () => {
+  http.get(ROUTES.slow, async () => {
     await delay(3000);
     return HttpResponse.json(
       {
@@ -80,7 +107,7 @@ export const handlers = [
     );
   }),
 
-  http.get("/api/retry", async () => {
+  http.get(ROUTES.retry, async () => {
     retryAttemptCount += 1;
     if (retryAttemptCount % 2 === 1) {
       return HttpResponse.json(

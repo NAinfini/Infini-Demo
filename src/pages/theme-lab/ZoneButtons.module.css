@@ -1,0 +1,86 @@
+﻿/* ── ZoneButtons layout ─────────────────────────────────────────────────── */
+
+.button-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+/* Individual variant card inside the grid */
+.button-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: var(--infini-radius, 6px);
+  border: var(--infini-border-width, 1px) solid
+    color-mix(in srgb, var(--infini-color-border) 60%, transparent);
+  background: color-mix(in srgb, var(--infini-color-surface) 60%, transparent);
+  transition:
+    border-color var(--infini-motion-hover, 180ms) var(--infini-motion-easing, ease),
+    background-color var(--infini-motion-hover, 180ms) var(--infini-motion-easing, ease);
+}
+
+.button-card:hover {
+  border-color: var(--infini-color-border);
+  background: var(--infini-color-surface);
+}
+
+/* Small label above each group of buttons */
+.variant-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  opacity: 0.55;
+  font-family: var(--infini-font-display);
+}
+
+/* Horizontal row of buttons inside a card */
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Minimal trigger button for the fakePress demo */
+.demo-trigger {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.75rem;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: var(--infini-radius, 6px);
+  border: var(--infini-border-width, 1px) solid var(--infini-color-border);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.75;
+  transition:
+    opacity var(--infini-motion-hover, 180ms) var(--infini-motion-easing, ease),
+    background-color var(--infini-motion-hover, 180ms) var(--infini-motion-easing, ease);
+}
+
+.demo-trigger:hover {
+  opacity: 1;
+  background: color-mix(in srgb, var(--infini-color-border) 20%, transparent);
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────────── */
+
+@media (max-width: 760px) {
+  .button-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .button-card {
+    padding: 12px;
+  }
+
+  .button-row {
+    gap: 6px;
+  }
+}
+

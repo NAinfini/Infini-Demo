@@ -1,0 +1,388 @@
+﻿/* ── StaggerList ── */
+
+.stagger-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stagger-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border: var(--infini-border-width, 1px) solid var(--infini-color-border);
+  border-radius: calc(var(--infini-radius, 8px) * 0.6);
+  background: var(--infini-color-surface);
+  box-shadow: var(--infini-shadow-sm, var(--infini-shadow));
+}
+
+.stagger-item-label {
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--infini-font-display);
+}
+
+.stagger-item-sub {
+  font-size: 11px;
+  opacity: 0.55;
+}
+
+/* ── ScrollAnimationTrigger ── */
+
+.scroll-trigger-block {
+  border: var(--infini-border-width, 1px) solid var(--infini-color-border);
+  border-radius: var(--infini-radius, 8px);
+  background: color-mix(in srgb, var(--infini-color-primary) 6%, var(--infini-color-surface));
+  overflow: hidden;
+}
+
+.scroll-trigger-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 24px 20px;
+}
+
+.scroll-trigger-label {
+  font-size: 14px;
+  font-weight: 700;
+  font-family: var(--infini-font-display);
+}
+
+.scroll-trigger-sub {
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+/* ── Parallax ── */
+
+.parallax-scene {
+  position: relative;
+  height: 140px;
+  overflow: hidden;
+  border-radius: var(--infini-radius, 8px);
+  border: var(--infini-border-width, 1px) solid var(--infini-color-border);
+  background: var(--infini-color-surface);
+}
+
+.parallax-bg-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.parallax-bg-shape {
+  position: absolute;
+  width: 160px;
+  height: 160px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--infini-color-primary) 18%, transparent);
+  filter: blur(24px);
+}
+
+.parallax-mid-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.parallax-mid-card {
+  padding: 8px 16px;
+  border: var(--infini-border-width, 1px) solid var(--infini-color-border);
+  border-radius: calc(var(--infini-radius, 8px) * 0.7);
+  background: color-mix(in srgb, var(--infini-color-surface) 80%, transparent);
+  backdrop-filter: blur(4px);
+}
+
+.parallax-mid-label {
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--infini-font-display);
+  opacity: 0.75;
+}
+
+.parallax-fg-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  padding: 10px 14px;
+}
+
+.parallax-fg-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.45;
+  font-family: var(--infini-font-display);
+}
+
+/* ── MorphingBlob ── */
+
+.blob-container {
+  border-radius: var(--infini-radius, 8px);
+  border: var(--infini-border-width, 1px) solid var(--infini-color-border);
+  min-height: 120px;
+}
+
+.blob-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 32px 20px;
+  text-align: center;
+}
+
+.blob-label {
+  font-size: 14px;
+  font-weight: 700;
+  font-family: var(--infini-font-display);
+}
+
+.blob-sub {
+  font-size: 11px;
+  opacity: 0.55;
+  font-family: var(--infini-font-mono, monospace);
+}
+
+/* ── RippleBackground ── */
+
+.ripple-container {
+  border-radius: var(--infini-radius, 8px);
+  border: var(--infini-border-width, 1px) solid var(--infini-color-border);
+  background: var(--infini-color-surface);
+  min-height: 120px;
+}
+
+.ripple-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.ripple-label {
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--infini-font-display);
+  opacity: 0.7;
+}
+
+/* ── CustomCursor ── */
+
+.cursor-demo {
+  border-radius: var(--infini-radius, 8px);
+  border: var(--infini-border-width, 1px) solid var(--infini-color-border);
+  background: var(--infini-color-surface);
+  min-height: 110px;
+}
+
+.cursor-demo-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 32px 20px;
+  text-align: center;
+}
+
+.cursor-demo-label {
+  font-size: 14px;
+  font-weight: 700;
+  font-family: var(--infini-font-display);
+}
+
+.cursor-demo-sub {
+  font-size: 11px;
+  opacity: 0.55;
+}
+
+/* ── LayoutIndicator ── */
+
+.layout-demo-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: var(--infini-border-width, 1px) solid var(--infini-color-border);
+}
+
+.layout-demo-tab {
+  position: relative;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--infini-font-display);
+  cursor: pointer;
+  opacity: 0.55;
+  user-select: none;
+  transition: opacity var(--infini-motion-hover, 160ms) var(--infini-motion-easing, ease);
+}
+
+.layout-demo-tab:hover {
+  opacity: 0.85;
+}
+
+.layout-demo-tab-active {
+  opacity: 1;
+}
+
+.layout-demo-indicator {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: var(--infini-color-primary);
+  border-radius: 1px 1px 0 0;
+}
+
+/* ── PageTransition ── */
+
+.transition-type-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.transition-type-btn {
+  padding: 5px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--infini-font-display);
+  text-transform: capitalize;
+  border: var(--infini-border-width, 1px) solid var(--infini-color-border);
+  border-radius: calc(var(--infini-radius, 8px) * 0.6);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity var(--infini-motion-hover, 160ms) var(--infini-motion-easing, ease),
+    background-color var(--infini-motion-hover, 160ms) var(--infini-motion-easing, ease),
+    border-color var(--infini-motion-hover, 160ms) var(--infini-motion-easing, ease);
+}
+
+.transition-type-btn:hover {
+  opacity: 0.85;
+}
+
+.transition-type-btn-active {
+  opacity: 1;
+  background: color-mix(in srgb, var(--infini-color-primary) 12%, transparent);
+  border-color: var(--infini-color-primary);
+  color: var(--infini-color-primary);
+}
+
+.transition-replay-btn {
+  margin-left: auto;
+  padding: 5px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--infini-font-display);
+  border: var(--infini-border-width, 1px) solid var(--infini-color-border);
+  border-radius: calc(var(--infini-radius, 8px) * 0.6);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity var(--infini-motion-hover, 160ms) var(--infini-motion-easing, ease);
+}
+
+.transition-replay-btn:hover {
+  opacity: 0.9;
+}
+
+.transition-preview-stage {
+  min-height: 90px;
+  border: var(--infini-border-width, 1px) solid var(--infini-color-border);
+  border-radius: calc(var(--infini-radius, 8px) * 0.7);
+  background: var(--infini-color-surface);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.transition-preview-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 20px;
+  text-align: center;
+}
+
+.transition-preview-label {
+  font-size: 16px;
+  font-weight: 700;
+  font-family: var(--infini-font-display);
+  text-transform: capitalize;
+}
+
+.transition-preview-sub {
+  font-size: 11px;
+  opacity: 0.55;
+}
+
+/* ── Motion Contracts Table (preserved from original) ── */
+
+.motion-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.motion-table th {
+  text-align: left;
+  padding: 6px 12px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.6;
+  border-bottom: var(--infini-border-width, 1px) solid var(--infini-color-border);
+}
+
+.motion-table td {
+  padding: 8px 12px;
+  border-bottom: var(--infini-border-width, 1px) solid var(--infini-color-border);
+  font-family: var(--infini-font-display);
+}
+
+.motion-table tr:last-child td {
+  border-bottom: none;
+}
+
+.motion-bar {
+  height: 4px;
+  background: var(--infini-color-primary);
+  border-radius: 2px;
+  opacity: 0.75;
+  transition: width var(--infini-motion-hover, 200ms) var(--infini-motion-easing, ease);
+}
+
+@media (max-width: 760px) {
+  .transition-type-row {
+    flex-wrap: wrap;
+  }
+
+  .transition-replay-btn {
+    margin-left: 0;
+  }
+
+  .parallax-scene {
+    height: 110px;
+  }
+}
+

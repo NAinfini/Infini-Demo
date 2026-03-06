@@ -1,0 +1,45 @@
+﻿.theme-lab-section {
+  margin-bottom: 24px;
+  padding: 20px;
+  border-radius: var(--infini-radius, 8px);
+  border: var(--infini-border-width, 1px) solid var(--infini-color-border);
+  background: var(--infini-color-surface);
+  box-shadow: var(--infini-shadow);
+  transition: transform var(--infini-motion-hover, 180ms) var(--infini-motion-easing, ease),
+    border-color var(--infini-motion-hover, 180ms) var(--infini-motion-easing, ease),
+    box-shadow var(--infini-motion-hover, 180ms) var(--infini-motion-easing, ease),
+    background-color var(--infini-motion-hover, 180ms) var(--infini-motion-easing, ease);
+}
+
+.theme-lab-section:last-child {
+  margin-bottom: 0;
+}
+
+.theme-lab-section-title {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.6;
+  margin: 0 0 16px;
+  font-family: var(--infini-font-display);
+}
+
+.section-caption {
+  margin-top: 12px;
+  font-size: 12px;
+  opacity: 0.65;
+}
+
+.section-inline-note {
+  margin-left: 12px;
+  font-size: 11px;
+  opacity: 0.6;
+}
+
+@media (max-width: 760px) {
+  .theme-lab-section {
+    padding: 14px;
+  }
+}
+

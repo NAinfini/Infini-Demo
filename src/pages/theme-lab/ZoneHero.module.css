@@ -1,0 +1,147 @@
+﻿/* ── Hero card shell ─────────────────────────────────────────── */
+.heroCard {
+  position: relative;
+  overflow: hidden;
+  padding: 48px 32px 36px;
+  border-radius: var(--infini-radius, 8px);
+  border: var(--infini-border-width, 1px) solid var(--infini-color-border);
+  background: var(--infini-color-surface);
+  box-shadow: var(--infini-shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0;
+  transition:
+    border-color var(--infini-motion-hover, 180ms) var(--infini-motion-easing, ease),
+    box-shadow var(--infini-motion-hover, 180ms) var(--infini-motion-easing, ease);
+}
+
+/* ── Particle canvas (absolute, full bleed) ──────────────────── */
+.heroParticles {
+  /* ParticleEffect renders a canvas with position:absolute already;
+     this class is a hook for any extra layer overrides if needed. */
+  z-index: 0;
+}
+
+/* ── LampHeading wrapper ─────────────────────────────────────── */
+.heroLamp {
+  width: 100%;
+  max-width: 520px;
+  z-index: 1;
+}
+
+/* ── Main theme name h1 ──────────────────────────────────────── */
+.heroTitle {
+  margin: 0;
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 700;
+  font-family: var(--infini-font-display);
+  color: var(--infini-color-primary);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+/* ── GlitchText subtitle row ─────────────────────────────────── */
+.heroSubtitle {
+  margin: 10px 0 0;
+  z-index: 1;
+}
+
+.heroGlitch {
+  font-size: clamp(13px, 2vw, 17px);
+  font-family: var(--infini-font-display);
+  color: var(--infini-color-primary);
+  opacity: 0.72;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* ── GradientText description ────────────────────────────────── */
+.heroDesc {
+  margin: 18px 0 0;
+  max-width: 480px;
+  z-index: 1;
+}
+
+.heroGradient {
+  font-size: clamp(13px, 1.8vw, 15px);
+  line-height: 1.6;
+  opacity: 0.88;
+}
+
+/* ── AnimatedText tagline ────────────────────────────────────── */
+.heroTagline {
+  margin: 10px 0 0;
+  z-index: 1;
+}
+
+.heroTaglineText {
+  font-size: 12px;
+  opacity: 0.55;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-family: var(--infini-font-display);
+}
+
+/* ── CTA action row ──────────────────────────────────────────── */
+.heroActions {
+  display: flex;
+  gap: 12px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+  justify-content: center;
+  z-index: 1;
+}
+
+/* ── Signature badge row ─────────────────────────────────────── */
+.heroSigs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 24px;
+  z-index: 1;
+}
+
+.heroSigBadge {
+  padding: 3px 10px;
+  border-radius: var(--infini-radius, 8px);
+  border: var(--infini-border-width, 1px) solid var(--infini-color-border);
+  background: color-mix(in srgb, var(--infini-color-surface) 60%, transparent);
+  color: var(--infini-color-primary);
+  opacity: 0;
+  animation: badge-fade-in 280ms ease forwards;
+}
+
+@keyframes badge-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 0.75;
+    transform: translateY(0);
+  }
+}
+
+/* ── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 760px) {
+  .heroCard {
+    padding: 32px 16px 24px;
+  }
+
+  .heroActions {
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .heroSigs {
+    margin-top: 18px;
+  }
+
+  .heroLamp {
+    max-width: 320px;
+  }
+}
+
