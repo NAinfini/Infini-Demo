@@ -1,233 +1,117 @@
-<div align="center">
+# Infini Demo
 
-# ✦ Infini Demo ✦
+**中文** | [English](./README_en.md)
 
-**Interactive showcase for the Infini Design System & Dev Kit**
+`Infini-Demo` 是 `Infini-Dev-Kit` 的交互式演示应用，用来集中展示主题系统、共享组件、动效层与 API 实验台。
 
-> **AI agents:** Read [`AGENTS.md`](./AGENTS.md) first — it has a machine-readable file index, import patterns, and modification guides.
+默认文档语言：中文。
 
-[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)](https://react.dev)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript&logoColor=white)](https://typescriptlang.org)
-[![Vite](https://img.shields.io/badge/Vite-7-646CFF?logo=vite&logoColor=white)](https://vite.dev)
-[![Mantine](https://img.shields.io/badge/Mantine-7-339AF0?logo=mantine&logoColor=white)](https://mantine.dev)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+> AI 代理先读 [`AGENTS.md`](./AGENTS.md)。
 
-<br/>
+## 预览
 
-> A living reference app — every theme, component, animation, and API pattern in the Infini ecosystem, runnable in one place.
+| 主题实验室 · Default | 主题实验室 · Cyberpunk | API 实验室 |
+| --- | --- | --- |
+| ![主题实验室 Default](./docs/images/theme-lab-default-zh.png) | ![主题实验室 Cyberpunk](./docs/images/theme-lab-cyberpunk-zh.png) | ![API 实验室](./docs/images/api-lab-zh.png) |
 
-</div>
+## 这个仓库用来做什么
 
----
+`Infini-Demo` 现在主要包含两个页面：
 
-## 🖼️ Preview
+- `ThemeLab`
+  用来检查主题、字体、颜色、按钮、数据展示、布局、视觉效果与内部 token 是否按预期工作。
+- `ApiLab`
+  用来演示 `createApiClient()` 的请求、错误处理、日志追踪与 MSW 模拟接口响应。
 
-<div align="center">
+截图与 README 一样，默认都使用中文界面。
 
-<!-- Replace these with actual screenshots after running the app -->
+## 技术栈
 
-| ThemeLab — Default | ThemeLab — Cyberpunk | ApiLab |
-|:--:|:--:|:--:|
-| ![ThemeLab Default](docs/preview-theme-default.png) | ![ThemeLab Cyberpunk](docs/preview-theme-cyberpunk.png) | ![ApiLab](docs/preview-apilab.png) |
+- React 19
+- TypeScript 5.9
+- Vite 7
+- Motion 12
+- ECharts 6
+- MSW 2
+- 本地工作区依赖 `@infini-dev-kit/*`
 
-<sub>📸 <em>Screenshots not yet captured — run the app and add them to <code>docs/</code></em></sub>
+## 快速开始
 
-</div>
+前提：
 
----
+- Node.js 20+
+- pnpm 10+
+- 同级目录已经存在 `Infini-Dev-Kit`
 
-## 🧭 What is this?
+目录示意：
 
-Infini Demo is a **two-page** React app that lets you see and interact with everything the Infini platform offers:
-
-<table>
-<tr>
-<td width="50%">
-
-### 🎨 ThemeLab
-
-Visual playground for the design system — colors, typography, spacing, controls, data components, charts, motion, and more — all rendered **live** under any selected theme.
-
-</td>
-<td width="50%">
-
-### 🔌 ApiLab
-
-Interactive API client that fires real (mocked) HTTP requests and displays request/response traces — error handling, retries, and distributed trace context.
-
-</td>
-</tr>
-</table>
-
----
-
-## ⚡ Key Capabilities
-
-| | Feature | Description |
-|:--|:--------|:------------|
-| 🎭 | **Multi-theme switching** | Swap between all 6 theme variants (`default`, `chibi`, `cyberpunk`, `neu-brutalism`, `black-gold`, `red-gold`) at runtime — fonts, colors, shadows, and motion contracts all update instantly |
-| 🎬 | **Motion system** | Four motion levels (`off` · `minimum` · `reduced` · `full`) cascade through every animation via CSS custom properties |
-| ✨ | **View Transitions** | Smooth cross-fade when switching themes, powered by the View Transition API |
-| 📜 | **Scroll-reactive vars** | Certain themes inject `--scroll-y` into `:root` to drive parallax and glitch effects |
-| 🧪 | **MSW mocking** | Deterministic API responses — success, validation (400), auth (401), timeouts, retries — no backend needed |
-| 🔗 | **Trace context** | Every API call carries a `traceparent` header, viewable in the ApiLab response log |
-
----
-
-## 🏗️ How it works
-
-```
-┌──────────────────────────────────────────────────────────┐
-│  App.tsx                                                 │
-│                                                          │
-│  ┌────────────┐  ┌──────────────┐  ┌──────────────────┐  │
-│  │  KitApp    │  │ ThemeToolbar │  │  Page Router     │  │
-│  │  (provider)│  │ (switcher)   │  │  (AnimateP.)     │  │
-│  └─────┬──────┘  └──────┬───────┘  └────────┬─────────┘  │
-│        │                │                   │            │
-│        ▼                ▼                   ▼            │
-│  Infini Dev Kit    Theme state         ThemeLab / ApiLab │
-│  (bridge, theme,   (reactive,          (10 zones /       │
-│   motion, fonts)    CSS vars)           API scenarios)    │
-└──────────────────────────────────────────────────────────┘
+```text
+GitHub/
+├── Infini-Dev-Kit/
+└── Infini-Demo/
 ```
 
-1. **`main.tsx`** boots MSW (in dev) then mounts the React tree
-2. **`KitApp`** wraps the app with the theme bridge — a reactive store holding theme ID, motion preferences, and resolved design tokens
-3. **`ThemeToolbar`** picks theme + motion level → triggers a View Transition, dynamically loads fonts, enables scroll-reactive CSS vars
-4. **`ThemeLab`** renders **14 zones**, each showcasing a slice of the design system:
-
-   | Zone | What it shows |
-   |:-----|:--------------|
-   | 🏠 Hero | Intro banner, headline effects, magnetic elements |
-   | 🎨 Foundation | Palette, typography, spacing, counters, borders |
-   | 🔘 Buttons | Button variants (motion, depth, shimmer, liquid, glitch, progress, social) |
-   | ✏️ Inputs | Text inputs, selects, sliders, switches |
-   | 🎛️ Controls | Color picker, tag input, date range picker |
-   | 🧭 Navigation | Tabs, marquee, stepper |
-   | 💬 Feedback | Number ticker, result states, ring progress |
-   | 📊 Data Display | Stat cards, timelines, tables, kanban, calendar |
-   | 📐 Layout | Page header, split view, responsive grid |
-   | ✨ Visual Effects | Cards, backgrounds, text effects, borders, code blocks |
-   | 🎁 Extras | Confetti, reveal on scroll, command palette |
-   | 📈 Charts | ECharts visualizations, theme-aware |
-   | 🎬 Motion | Spring / keyframe animations, parallax, stagger, cursor |
-   | 🔧 Internals | Dev-facing tokens & contracts |
-
-5. **`ApiLab`** fires requests against MSW handlers, displaying raw traces and parsed responses
-
----
-
-## 🧰 Tech Stack
-
-<div align="center">
-
-| | Technology | Version | Role |
-|:--|:----------|:--------|:-----|
-| <img src="https://cdn.simpleicons.org/react/61DAFB" width="16"/> | React | 19 | UI framework |
-| <img src="https://cdn.simpleicons.org/typescript/3178C6" width="16"/> | TypeScript | 5.9 | Type safety |
-| <img src="https://cdn.simpleicons.org/vite/646CFF" width="16"/> | Vite | 7 | Build tool |
-| <img src="https://cdn.simpleicons.org/mantine/339AF0" width="16" /> | Mantine | 7 | Component library |
-| 🎬 | Motion | 12 | Animations (Framer Motion) |
-| <img src="https://cdn.simpleicons.org/apacheecharts/AA344D" width="16"/> | ECharts | 6 | Data visualization |
-| 🔷 | Tabler Icons | 3 | Icon set |
-| 🧪 | MSW | 2 | API mocking |
-| 📦 | Infini Dev Kit | workspace | Design system + utilities |
-
-</div>
-
----
-
-## 📋 Prerequisites
-
-- **Node.js** >= 20
-- **pnpm** — this is a workspace monorepo (`workspace:*` deps won't resolve with npm)
-- The parent monorepo (**Infini-Dev-Kit**) must be set up first so `@infini-dev-kit/*` packages are available
-
----
-
-## 🚀 Getting Started
+启动步骤：
 
 ```bash
-# 1 · Clone the repo (and the sibling Infini-Dev-Kit)
-git clone <repo-url> Infini-Demo
-git clone <dev-kit-url> Infini-Dev-Kit   # must sit next to Infini-Demo
-
-# 2 · Install dependencies
 cd Infini-Demo
 pnpm install
-
-# 3 · Start the demo app
 pnpm dev
 ```
 
-Dev server starts at **`http://localhost:5173`**.
+默认开发地址：
 
-### Build for production
+```text
+http://localhost:5173
+```
+
+## 常用命令
 
 ```bash
-pnpm build     # tsc -b && vite build
-pnpm preview   # serve production bundle locally
+pnpm dev
+pnpm typecheck
+pnpm build
+pnpm preview
 ```
 
-### Security defaults
+## 仓库结构
 
-- Dev and preview responses include baseline security headers (`CSP`, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `COOP`).
-- CSP is configured to allow local module scripts, HMR websocket connections, and Google Fonts used by theme font loading.
-- MSW unhandled requests default to `error` in development. To override explicitly, set `VITE_MSW_UNHANDLED_REQUEST=warn` or `VITE_MSW_UNHANDLED_REQUEST=bypass`.
-- For production deployment, mirror these headers at the edge/CDN and add `Strict-Transport-Security` on HTTPS hosts.
-
----
-
-## 📁 Project Structure
-
-```
+```text
 src/
-├── App.tsx                    # 🏠 Root — theme switching, page routing, transitions
-├── main.tsx                   # ⚡ Entry — MSW bootstrap + React mount
-├── index.css                  # 🎨 Global styles (scrollbar, view transitions)
+├── App.tsx
+├── main.tsx
+├── components/
+├── i18n/
 ├── mocks/
-│   ├── browser.ts             # 🧪 MSW browser worker setup
-│   └── handlers.ts            # 📡 Mock API route handlers
-└── pages/
-    ├── ApiLab.tsx              # 🔌 API testing interface
-    ├── index.ts                # 📦 Page barrel exports
-    └── theme-lab/
-        ├── ThemeLab.tsx        # 🎯 Zone orchestrator
-        ├── data.ts             # 📊 Mock data (tables, trees, cascaders)
-        ├── types.ts            # 🔷 Shared ZoneProps interface
-        ├── shared.module.css   # 🎨 Cross-zone CSS module
-        ├── Zone*.tsx           # 🧩 14 zone components
-        └── Zone*.module.css    # 💅 Per-zone CSS modules
+├── pages/
+│   ├── ApiLab.tsx
+│   └── theme-lab/
+├── providers/
+└── theme/
 ```
 
----
+## 你能在这里看到什么
 
-## 📸 Adding Screenshots
+- 主题切换：
+  `default`、`chibi`、`cyberpunk`、`neu-brutalism`、`black-gold`、`red-gold`
+- 动效等级切换：
+  `off`、`minimum`、`reduced`、`full`
+- 中文界面下的主题字体与 token 生效情况
+- 按钮基底与组合效果
+- API 请求日志、错误响应与覆盖率演示
 
-To populate the preview section above:
+## 与 Dev Kit 的关系
 
-```bash
-# 1. Run the dev server
-pnpm dev
+这个仓库是 `Infini-Dev-Kit` 的消费端与验证场，不应该复制 Dev Kit 内的主题逻辑、组件实现或工具函数。需要改共享能力时，优先回到 `Infini-Dev-Kit` 修改，再回这里验证。
 
-# 2. Take screenshots of:
-#    - ThemeLab with default theme  →  docs/preview-theme-default.png
-#    - ThemeLab with cyberpunk theme →  docs/preview-theme-cyberpunk.png
-#    - ApiLab interface              →  docs/preview-apilab.png
+## 截图资源
 
-# 3. Create the docs folder and add images
-mkdir docs
-# ... save screenshots there
-```
+README 中使用的截图位于：
 
----
+- [`docs/images/theme-lab-default-zh.png`](./docs/images/theme-lab-default-zh.png)
+- [`docs/images/theme-lab-cyberpunk-zh.png`](./docs/images/theme-lab-cyberpunk-zh.png)
+- [`docs/images/api-lab-zh.png`](./docs/images/api-lab-zh.png)
 
-<div align="center">
+## 许可证
 
-## 📄 License
-
-[MIT](./LICENSE) · Built with the **Infini Design System**
-
-
-</div>
+[MIT](./LICENSE)
