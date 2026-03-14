@@ -29,9 +29,20 @@
   font-size: 12px;
   cursor: pointer;
   user-select: none;
-  transition: transform 140ms ease, box-shadow 140ms ease, opacity 140ms ease;
+  transition: transform 140ms ease, opacity 140ms ease;
   position: relative;
   overflow: hidden;
+}
+
+.swatch-color::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.24);
+  opacity: 0;
+  transition: opacity 140ms ease;
+  pointer-events: none;
 }
 
 .swatch-color::before {
@@ -44,7 +55,10 @@
 
 .swatch-color:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.24);
+}
+
+.swatch-color:hover::after {
+  opacity: 1;
 }
 
 .swatch-color:active {

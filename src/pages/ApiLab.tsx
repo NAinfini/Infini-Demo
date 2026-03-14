@@ -3,10 +3,11 @@ import { AnimatePresence, motion as motionUi } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { ApiClientError, createApiClient } from "@infini-dev-kit/api-client";
-import { useThemeSnapshot } from "@infini-dev-kit/frontend/provider";
+import { useThemeSnapshot } from "../providers/DemoThemeProvider";
+import { useT } from "../i18n";
 import {
+  DepthButton,
   GlitchText,
-  MotionButton,
   RevealOnScroll,
   StaggerList,
 } from "@infini-dev-kit/frontend/components";
@@ -37,21 +38,42 @@ const COVERED_ENDPOINT_IDS = new Set<string>([
   "retry",
 ]);
 
+const MAX_USER_ID_LENGTH = 12;
 
 function nowTimestamp(): string {
   return new Date().toLocaleTimeString();
 }
 
 function makeLogId(): string {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+
   return `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
+function randomHex(length: number): string {
+  const byteLength = Math.ceil(length / 2);
+
+  if (typeof crypto !== "undefined" && typeof crypto.getRandomValues === "function") {
+    const bytes = new Uint8Array(byteLength);
+    crypto.getRandomValues(bytes);
+    return Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("").slice(0, length);
+  }
+
+  return Math.random().toString(16).slice(2).padEnd(length, "0").slice(0, length);
+}
+
 function createTraceContext(): TraceInfo {
-  const randomHex = Math.random().toString(16).slice(2).padEnd(32, "0").slice(0, 32);
-  const parentHex = Math.random().toString(16).slice(2).padEnd(16, "0").slice(0, 16);
+  const traceId = randomHex(32);
+  const parentId = randomHex(16);
   return {
-    traceparent: `00-${randomHex}-${parentHex}-01`,
+    traceparent: `00-${traceId}-${parentId}-01`,
   };
+}
+
+function sanitizeUserId(rawValue: string): string {
+  return rawValue.replace(/\D+/g, "").slice(0, MAX_USER_ID_LENGTH);
 }
 
 function stringifyPreview(value: unknown): string {
@@ -68,6 +90,7 @@ function stringifyPreview(value: unknown): string {
 
 export function ApiLab() {
   const { state } = useThemeSnapshot();
+  const t = useT("api-lab");
   const isCyberpunk = state.themeId === "cyberpunk";
   const [logs, setLogs] = useState<ApiLabLogEntry[]>([]);
   const [selectedUserId, setSelectedUserId] = useState("1");
@@ -190,16 +213,17 @@ export function ApiLab() {
     }, runOptions);
   }
 
-  function runFetchUserDetail(userId = selectedUserId, runOptions?: RunOptions): Promise<void> {
+  function runFetchUserDetail(userId?: string, runOptions?: RunOptions): Promise<void> {
+    const id = sanitizeUserId(userId ?? selectedUserId) || "1";
     return runAction({
       label: "Fetch User Detail",
       method: "GET",
-      url: `/api/users/${userId}`,
+      url: `/api/users/${id}`,
       action: () =>
         client.request({
           method: "GET",
           path: "/users/:id",
-          pathParams: { id: userId },
+          pathParams: { id },
         }),
     }, runOptions);
   }
@@ -267,7 +291,7 @@ export function ApiLab() {
   }
 
   async function runAllEndpoints(): Promise<void> {
-    const userId = selectedUserId.trim() || "1";
+    const userId = sanitizeUserId(selectedUserId) || "1";
     setIsRunning(true);
     try {
       await runFetchUsers({ manageLoading: false });
@@ -285,107 +309,123 @@ export function ApiLab() {
     <div className="api-lab">
       <RevealOnScroll>
         <header className="api-lab-header">
-          <h1>{isCyberpunk ? <GlitchText trigger="interval" intensity="medium">Admin Console API Test</GlitchText> : "Admin Console API Test"}</h1>
-          <p>Endpoint test console for `createApiClient()` with deterministic MSW responses and endpoint coverage checks.</p>
+          <h1>{isCyberpunk ? <GlitchText trigger="interval" intensity="medium">{t("title")}</GlitchText> : t("title")}</h1>
+          <p>{t("subtitle")}</p>
         </header>
       </RevealOnScroll>
 
       <div className="api-lab-grid">
-        <section className="api-lab-panel">
-          <h2>{isCyberpunk ? <GlitchText trigger="hover">Scenarios</GlitchText> : "Scenarios"}</h2>
+        <section className="api-lab-panel" aria-busy={isRunning}>
+          <h2>{isCyberpunk ? <GlitchText trigger="hover">{t("scenarios")}</GlitchText> : t("scenarios")}</h2>
           <StaggerList className="api-lab-action-grid" staggerMs={30}>
             <motionUi.div variants={staggerChild}>
-              <MotionButton
+              <DepthButton
                 className="demo-control-motion"
                 onClick={() => runFetchUsers()}
-                loading={isRunning}
+                disabled={isRunning}
+                type="primary"
               >
-                Fetch Users
-              </MotionButton>
+                {isRunning ? t("btn.running") : t("btn.fetchUsers")}
+              </DepthButton>
             </motionUi.div>
 
             <motionUi.div className="api-lab-user-id" variants={staggerChild}>
-              <label htmlFor="api-user-id">User ID:</label>
+              <label htmlFor="api-user-id">{t("label.userId")}</label>
               <div>
                 <TextInput
                   id="api-user-id"
                   className="demo-control-motion"
                   value={selectedUserId}
-                  onChange={(event) => setSelectedUserId(event.target.value)}
+                  onChange={(event) => setSelectedUserId(sanitizeUserId(event.target.value))}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" && !isRunning) {
+                      void runFetchUserDetail();
+                    }
+                  }}
                   size="xs"
+                  inputMode="numeric"
+                  maxLength={MAX_USER_ID_LENGTH}
                   style={{ width: 90 }}
                 />
               </div>
-              <MotionButton
+              <DepthButton
                 className="demo-control-motion"
-                size="small"
-                loading={isRunning}
+                size="sm"
+                disabled={isRunning}
                 onClick={() => runFetchUserDetail()}
+                aria-label={t("aria.fetchUserDetail")}
+                type="secondary"
               >
-                Run
-              </MotionButton>
+                {isRunning ? "…" : t("btn.run")}
+              </DepthButton>
             </motionUi.div>
 
             <motionUi.div variants={staggerChild}>
-              <MotionButton
+              <DepthButton
                 className="demo-control-motion"
-                loading={isRunning}
+                disabled={isRunning}
                 onClick={() => runValidationError()}
+                type="secondary"
               >
-                Validation Error (400)
-              </MotionButton>
+                {isRunning ? t("btn.running") : t("btn.validationError")}
+              </DepthButton>
             </motionUi.div>
 
             <motionUi.div variants={staggerChild}>
-              <MotionButton
+              <DepthButton
                 className="demo-control-motion"
-                loading={isRunning}
+                disabled={isRunning}
                 onClick={() => runAuthError()}
+                type="secondary"
               >
-                Auth Error (401)
-              </MotionButton>
+                {isRunning ? "Running…" : "Auth Error (401)"}
+              </DepthButton>
             </motionUi.div>
 
             <motionUi.div variants={staggerChild}>
-              <MotionButton
+              <DepthButton
                 className="demo-control-motion"
-                loading={isRunning}
+                disabled={isRunning}
                 onClick={() => runTimeoutDemo()}
+                type="secondary"
               >
-                Timeout Demo (2s)
-              </MotionButton>
+                {isRunning ? "Running…" : "Client Timeout (2s)"}
+              </DepthButton>
             </motionUi.div>
 
             <motionUi.div variants={staggerChild}>
-              <MotionButton
+              <DepthButton
                 className="demo-control-motion"
-                loading={isRunning}
+                disabled={isRunning}
                 onClick={() => runRetryDemo()}
+                type="secondary"
               >
-                Retry Demo (429 - 200)
-              </MotionButton>
+                {isRunning ? "Running…" : "Retry Demo (429 - 200)"}
+              </DepthButton>
             </motionUi.div>
 
             <motionUi.div variants={staggerChild}>
               <Group gap={8}>
-                <MotionButton
+                <DepthButton
                   className="demo-control-motion"
-                  size="small"
-                  loading={isRunning}
+                  size="sm"
+                  disabled={isRunning}
                   onClick={runAllEndpoints}
+                  type="primary"
                 >
-                  Run All Endpoints
-                </MotionButton>
-                <MotionButton
+                  {isRunning ? "Running…" : "Run All Endpoints"}
+                </DepthButton>
+                <DepthButton
                   className="demo-control-motion"
-                  size="small"
+                  size="sm"
                   disabled={isRunning}
                   onClick={() => {
                     setLogs([]);
                   }}
+                  type="secondary"
                 >
                   Clear Logs
-                </MotionButton>
+                </DepthButton>
               </Group>
             </motionUi.div>
           </StaggerList>
@@ -405,10 +445,10 @@ export function ApiLab() {
               <table className="api-lab-coverage-table">
                 <thead>
                   <tr>
-                    <th>Status</th>
-                    <th>Method</th>
-                    <th>Route</th>
-                    <th>Description</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Method</th>
+                    <th scope="col">Route</th>
+                    <th scope="col">Description</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -450,10 +490,10 @@ export function ApiLab() {
           <h2>{isCyberpunk ? <GlitchText trigger="hover">Request Log</GlitchText> : "Request Log"}</h2>
           <div className="api-lab-log-meta">
             <Text c="dimmed">Entries: {logs.length}</Text>
-            <Text c="dimmed">Current Trace: {traceHint.traceparent?.slice(0, 20) ?? "none"}...</Text>
+            <Text c="dimmed">Current Trace: {traceHint.traceparent ? `${traceHint.traceparent.slice(0, 20)}...` : "none"}</Text>
           </div>
 
-          <div className="api-lab-log-scroll" ref={logPanelRef}>
+          <div className="api-lab-log-scroll" ref={logPanelRef} role="log" aria-live="polite">
             {logs.length === 0 ? (
               <div className="api-lab-log-empty">No requests yet. Run a scenario to populate this panel.</div>
             ) : (

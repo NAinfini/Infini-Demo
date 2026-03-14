@@ -1,0 +1,37 @@
+.confetti-wrap {
+  position: relative;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.reveal-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.reveal-card {
+  background: color-mix(in srgb, currentColor 6%, transparent);
+  border-radius: 8px;
+  padding: 1.2rem;
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.command-palette-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.kbd {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-family: monospace;
+  background: color-mix(in srgb, currentColor 10%, transparent);
+  border: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+}

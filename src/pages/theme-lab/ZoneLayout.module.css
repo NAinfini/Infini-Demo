@@ -1,0 +1,31 @@
+.page-header-wrap {
+  border: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.split-view-wrap {
+  height: 240px;
+  border: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.split-pane {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 1rem;
+  opacity: 0.7;
+  font-size: 0.85rem;
+}
+
+.grid-item {
+  background: color-mix(in srgb, currentColor 6%, transparent);
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}

@@ -1,35 +1,77 @@
 import { type CSSProperties } from "react";
 
-import { useThemeSnapshot } from "@infini-dev-kit/frontend/provider";
+import { useThemeSnapshot } from "../../providers/DemoThemeProvider";
+import { useT } from "../../i18n";
 import { AnimatedTabs, ScrollProgress } from "@infini-dev-kit/frontend/components";
 import type { AnimatedTabItem } from "@infini-dev-kit/frontend/theme/motion-types";
 
 import { ZoneButtons } from "./ZoneButtons";
 import { ZoneCharts } from "./ZoneCharts";
+import { ZoneControls } from "./ZoneControls";
+import { ZoneDataDisplay } from "./ZoneDataDisplay";
+import { ZoneExtras } from "./ZoneExtras";
 import { ZoneFeedback } from "./ZoneFeedback";
 import { ZoneFoundation } from "./ZoneFoundation";
 import { ZoneHero } from "./ZoneHero";
 import { ZoneInputs } from "./ZoneInputs";
 import { ZoneInternals } from "./ZoneInternals";
+import { ZoneLayout } from "./ZoneLayout";
 import { ZoneMotion } from "./ZoneMotion";
 import { ZoneNavigation } from "./ZoneNavigation";
 import { ZoneVisualEffects } from "./ZoneVisualEffects";
 import styles from "./ThemeLab.module.css";
 
-const TAB_ITEMS: AnimatedTabItem[] = [
-  { key: "foundation", label: "Foundation", content: <ZoneFoundation zoneIndex={1} /> },
-  { key: "buttons", label: "Buttons", content: <ZoneButtons zoneIndex={2} /> },
-  { key: "inputs", label: "Inputs", content: <ZoneInputs zoneIndex={3} /> },
-  { key: "navigation", label: "Navigation", content: <ZoneNavigation zoneIndex={4} /> },
-  { key: "feedback", label: "Feedback", content: <ZoneFeedback zoneIndex={5} /> },
-  { key: "visuals", label: "Visual Effects", content: <ZoneVisualEffects zoneIndex={6} /> },
-  { key: "motion", label: "Motion", content: <ZoneMotion zoneIndex={7} /> },
-  { key: "charts", label: "Charts", content: <ZoneCharts zoneIndex={8} /> },
-  { key: "internals", label: "Internals", content: <ZoneInternals zoneIndex={9} /> },
-];
-
 export function ThemeLab() {
   const { motion, state, theme } = useThemeSnapshot();
+  const t = useT("theme-lab");
+
+  const TAB_ITEMS: AnimatedTabItem[] = [
+    { key: "foundation", label: t("tab.foundation"), content: <ZoneFoundation zoneIndex={1} /> },
+    {
+      key: "forms",
+      label: t("tab.forms"),
+      content: (
+        <>
+          <ZoneButtons zoneIndex={2} />
+          <ZoneInputs zoneIndex={3} />
+          <ZoneControls zoneIndex={4} />
+        </>
+      ),
+    },
+    {
+      key: "navigation",
+      label: t("tab.navigation"),
+      content: (
+        <>
+          <ZoneNavigation zoneIndex={5} />
+          <ZoneLayout zoneIndex={8} />
+        </>
+      ),
+    },
+    { key: "feedback", label: t("tab.feedback"), content: <ZoneFeedback zoneIndex={6} /> },
+    {
+      key: "data",
+      label: t("tab.data"),
+      content: (
+        <>
+          <ZoneDataDisplay zoneIndex={7} />
+          <ZoneCharts zoneIndex={11} />
+        </>
+      ),
+    },
+    {
+      key: "effects",
+      label: t("tab.effects"),
+      content: (
+        <>
+          <ZoneVisualEffects zoneIndex={9} />
+          <ZoneMotion zoneIndex={10} />
+          <ZoneExtras zoneIndex={12} />
+        </>
+      ),
+    },
+    { key: "internals", label: t("tab.internals"), content: <ZoneInternals zoneIndex={13} /> },
+  ];
   const motionClass =
     motion.effectiveMode === "off"
       ? `${styles["theme-lab"]} theme-lab-motion-off`

@@ -5,7 +5,7 @@
   padding: 10px;
   border: var(--infini-border-width, 1px) solid var(--infini-color-border);
   border-radius: calc(var(--infini-radius, 8px) * 0.6);
-  font-family: var(--infini-font-body);
+  font-family: var(--infini-font-mono, monospace);
   font-size: 12px;
 }
 

@@ -1,13 +1,14 @@
-import { useThemeSnapshot } from "@infini-dev-kit/frontend/provider";
+import { useThemeSnapshot } from "../../providers/DemoThemeProvider";
+import { useT } from "../../i18n";
 import {
-  LampHeading,
+  AnimatedText,
+  DepthButton,
   GlitchText,
   GradientText,
-  AnimatedText,
+  LampHeading,
   MagneticElement,
-  InfiniButton,
-  ShinyText,
   ParticleEffect,
+  ShinyText,
 } from "@infini-dev-kit/frontend/components";
 
 import type { ZoneProps } from "./types";
@@ -16,6 +17,7 @@ import layoutStyles from "./ThemeLab.module.css";
 
 export function ZoneHero({ zoneIndex }: ZoneProps) {
   const { theme } = useThemeSnapshot();
+  const t = useT("theme-lab");
 
   return (
     <section
@@ -59,7 +61,7 @@ export function ZoneHero({ zoneIndex }: ZoneProps) {
             chromaticOffset={1.4}
             className={styles.heroGlitch}
           >
-            Component Kit
+            {t("hero.subtitle")}
           </GlitchText>
         </p>
 
@@ -83,17 +85,17 @@ export function ZoneHero({ zoneIndex }: ZoneProps) {
             loop={false}
             className={styles.heroTaglineText}
           >
-            Adaptive. Animated. Yours.
+            {t("hero.tagline")}
           </AnimatedText>
         </p>
 
-        {/* CTA buttons inside a magnetic wrapper */}
-        <div className={styles.heroActions}>
+        {/* CTA buttons — decorative showcase, not actionable */}
+        <div className={styles.heroActions} aria-label={t("hero.btnShowcase")}>
           <MagneticElement strength={10} damping={22} stiffness={140}>
-            <InfiniButton>Explore</InfiniButton>
+            <DepthButton tabIndex={-1} aria-hidden="true">{t("hero.explore")}</DepthButton>
           </MagneticElement>
           <MagneticElement strength={8} damping={22} stiffness={140}>
-            <InfiniButton>View Source</InfiniButton>
+            <DepthButton type="secondary" tabIndex={-1} aria-hidden="true">{t("hero.viewSource")}</DepthButton>
           </MagneticElement>
         </div>
 

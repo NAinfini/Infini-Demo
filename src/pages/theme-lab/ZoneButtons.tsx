@@ -1,17 +1,16 @@
 import { useState } from "react";
 
-import { useThemeSnapshot } from "@infini-dev-kit/frontend/provider";
 import {
+  CrystalPrismButton,
   DepthButton,
-  GlitchButton,
-  InfiniButton,
-  LiquidButton,
-  MotionButton,
+  DepthToggle,
+  LiquidFillButton,
   ProgressButton,
-  ShimmerButton,
+  SlideRevealButton,
   SocialButton,
-  useButtonDispatch,
+  SoftClayButton,
 } from "@infini-dev-kit/frontend/components";
+import { useT } from "../../i18n";
 
 import type { ZoneProps } from "./types";
 import styles from "./ZoneButtons.module.css";
@@ -23,369 +22,218 @@ function fakeAsync(ms = 1800): Promise<void> {
 }
 
 export function ZoneButtons({ zoneIndex }: ZoneProps) {
-  const { theme } = useThemeSnapshot();
+  const t = useT("theme-lab");
   const [progressLoading, setProgressLoading] = useState(false);
-  const dispatch = useButtonDispatch();
+  const [readyPressed, setReadyPressed] = useState(true);
+  const [pinPressed, setPinPressed] = useState(false);
+  const [infoPressed, setInfoPressed] = useState(false);
+  const [warningPressed, setWarningPressed] = useState(false);
 
   const handleProgressPress = () => fakeAsync(2000);
   const handleProgressSpinnerPress = () => fakeAsync(1600);
-  const handleShimmerPress = () => fakeAsync(1500);
 
   return (
     <section
       data-zone-index={zoneIndex}
       className={`${layoutStyles.zone} ${layoutStyles["theme-zone"]} zone-buttons stagger-in`}
     >
-      <div className={`${layoutStyles["zone-label"]} ambient-label`}>Buttons</div>
+      <div className={`${layoutStyles["zone-label"]} ambient-label`}>{t("zone.buttons")}</div>
 
-      {/* ── InfiniButton (unified dispatch) ── */}
-      <section className={sharedStyles["theme-lab-section"]} aria-labelledby="section-infini-btn">
-        <h2 id="section-infini-btn" className={`${sharedStyles["theme-lab-section-title"]} ambient-section-title`}>
-          InfiniButton
-        </h2>
-        <p className={sharedStyles["section-caption"]}>
-          Unified button API — auto-dispatches to{" "}
-          <code style={{ fontFamily: theme.typography.en.mono }}>{dispatch === "glitch" ? "GlitchButton" : dispatch === "depth" ? "DepthButton" : "ShimmerButton"}</code>{" "}
-          for the current theme. Write{" "}
-          <code style={{ fontFamily: theme.typography.en.mono }}>&lt;InfiniButton&gt;</code>{" "}
-          and the theme decides the style.
-        </p>
-        <div className={styles["button-grid"]}>
-          <div className={styles["button-card"]}>
-            <span className={styles["variant-label"]}>Default</span>
-            <div className={styles["button-row"]}>
-              <InfiniButton>Action</InfiniButton>
-              <InfiniButton before="🚀">Launch</InfiniButton>
-              <InfiniButton disabled>Disabled</InfiniButton>
-            </div>
-          </div>
-          <div className={styles["button-card"]}>
-            <span className={styles["variant-label"]}>With overrides</span>
-            <div className={styles["button-row"]}>
-              <InfiniButton overrides={{ depth: { type: "danger" }, glitch: { intensity: "heavy" } }}>
-                Danger / Heavy
-              </InfiniButton>
-              <InfiniButton after="→">Navigate</InfiniButton>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── MotionButton ── */}
-      <section className={sharedStyles["theme-lab-section"]} aria-labelledby="section-motion-btn">
-        <h2 id="section-motion-btn" className={`${sharedStyles["theme-lab-section-title"]} ambient-section-title`}>
-          MotionButton
-        </h2>
-        <p className={sharedStyles["section-caption"]}>
-          Mantine Button wrapped in a Motion whileHover/whileTap shell with theme-aware ripple effects.
-        </p>
-        <div className={styles["button-grid"]}>
-          <div className={styles["button-card"]}>
-            <span className={styles["variant-label"]}>Primary (filled)</span>
-            <div className={styles["button-row"]}>
-              <MotionButton type="primary">Primary</MotionButton>
-              <MotionButton type="primary" loading>Loading</MotionButton>
-              <MotionButton type="primary" disabled>Disabled</MotionButton>
-            </div>
-          </div>
-          <div className={styles["button-card"]}>
-            <span className={styles["variant-label"]}>Default</span>
-            <div className={styles["button-row"]}>
-              <MotionButton>Default</MotionButton>
-              <MotionButton disabled>Disabled</MotionButton>
-            </div>
-          </div>
-          <div className={styles["button-card"]}>
-            <span className={styles["variant-label"]}>Outline / Dashed</span>
-            <div className={styles["button-row"]}>
-              <MotionButton type="dashed">Outline</MotionButton>
-              <MotionButton type="dashed" disabled>Disabled</MotionButton>
-            </div>
-          </div>
-          <div className={styles["button-card"]}>
-            <span className={styles["variant-label"]}>Danger</span>
-            <div className={styles["button-row"]}>
-              <MotionButton type="primary" danger>Delete</MotionButton>
-              <MotionButton type="primary" danger disabled>Disabled</MotionButton>
-            </div>
-          </div>
-          <div className={styles["button-card"]}>
-            <span className={styles["variant-label"]}>Sizes</span>
-            <div className={styles["button-row"]}>
-              <MotionButton type="primary" size="small">Small</MotionButton>
-              <MotionButton type="primary" size="middle">Middle</MotionButton>
-              <MotionButton type="primary" size="large">Large</MotionButton>
-            </div>
-          </div>
-          <div className={styles["button-card"]}>
-            <span className={styles["variant-label"]}>Subtle / Link</span>
-            <div className={styles["button-row"]}>
-              <MotionButton type="link">Link</MotionButton>
-              <MotionButton type="text">Text</MotionButton>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── DepthButton ── */}
       <section className={sharedStyles["theme-lab-section"]} aria-labelledby="section-depth-btn">
         <h2 id="section-depth-btn" className={`${sharedStyles["theme-lab-section-title"]} ambient-section-title`}>
           DepthButton
         </h2>
         <p className={sharedStyles["section-caption"]}>
-          3D raised button with depth shadow, ripple effect, and pointer-position-aware tilt. Raiser level follows the active theme.
+          {t("buttons.depth.caption")}
         </p>
         <div className={styles["button-grid"]}>
           <div className={styles["button-card"]}>
-            <span className={styles["variant-label"]}>Primary</span>
+            <span className={styles["variant-label"]}>{t("buttons.variant.primary")}</span>
             <div className={styles["button-row"]}>
-              <DepthButton type="primary">Launch</DepthButton>
-              <DepthButton type="primary" before="🚀">With Icon</DepthButton>
-              <DepthButton type="primary" disabled>Disabled</DepthButton>
+              <DepthButton type="primary">{t("buttons.btn.launch")}</DepthButton>
+              <DepthButton type="primary" before="🚀">{t("buttons.btn.withIcon")}</DepthButton>
+              <DepthButton type="primary" disabled>{t("buttons.btn.disabled")}</DepthButton>
             </div>
           </div>
           <div className={styles["button-card"]}>
-            <span className={styles["variant-label"]}>Secondary</span>
+            <span className={styles["variant-label"]}>{t("buttons.variant.secondary")}</span>
             <div className={styles["button-row"]}>
-              <DepthButton type="secondary">Default</DepthButton>
-              <DepthButton type="secondary" after="→">Navigate</DepthButton>
-              <DepthButton type="secondary" disabled>Disabled</DepthButton>
+              <DepthButton type="secondary">{t("buttons.btn.default")}</DepthButton>
+              <DepthButton type="secondary" after="→">{t("buttons.btn.navigate")}</DepthButton>
+              <DepthButton type="secondary" disabled>{t("buttons.btn.disabled")}</DepthButton>
             </div>
           </div>
           <div className={styles["button-card"]}>
-            <span className={styles["variant-label"]}>Danger</span>
+            <span className={styles["variant-label"]}>{t("buttons.variant.danger")}</span>
             <div className={styles["button-row"]}>
-              <DepthButton type="danger">Delete</DepthButton>
-              <DepthButton type="danger" before="⚠️">Warning</DepthButton>
+              <DepthButton type="danger">{t("buttons.btn.delete")}</DepthButton>
+              <DepthButton type="danger" before="⚠️">{t("buttons.btn.warning")}</DepthButton>
             </div>
           </div>
           <div className={styles["button-card"]}>
-            <span className={styles["variant-label"]}>Sizes</span>
+            <span className={styles["variant-label"]}>{t("buttons.variant.success")}</span>
             <div className={styles["button-row"]}>
-              <DepthButton size="sm">Small</DepthButton>
-              <DepthButton size="md">Medium</DepthButton>
-              <DepthButton size="lg">Large</DepthButton>
+              <DepthButton type="success">{t("buttons.btn.confirm")}</DepthButton>
+              <DepthButton type="success" before="✓">{t("buttons.btn.approve")}</DepthButton>
             </div>
           </div>
           <div className={styles["button-card"]}>
-            <span className={styles["variant-label"]}>No Tilt / No Ripple</span>
+            <span className={styles["variant-label"]}>{t("buttons.variant.warning")}</span>
             <div className={styles["button-row"]}>
-              <DepthButton hoverTilt={false}>No Tilt</DepthButton>
-              <DepthButton ripple={false}>No Ripple</DepthButton>
+              <DepthButton type="warning">{t("buttons.btn.caution")}</DepthButton>
+              <DepthButton type="warning" before="⚡">{t("buttons.btn.alert")}</DepthButton>
+            </div>
+          </div>
+          <div className={styles["button-card"]}>
+            <span className={styles["variant-label"]}>{t("buttons.variant.info")}</span>
+            <div className={styles["button-row"]}>
+              <DepthButton type="info">{t("buttons.btn.info")}</DepthButton>
+              <DepthButton type="info" before="ℹ️">{t("buttons.btn.details")}</DepthButton>
+            </div>
+          </div>
+          <div className={styles["button-card"]}>
+            <span className={styles["variant-label"]}>{t("buttons.variant.sizes")}</span>
+            <div className={styles["button-row"]}>
+              <DepthButton size="sm">{t("buttons.btn.small")}</DepthButton>
+              <DepthButton size="md">{t("buttons.btn.medium")}</DepthButton>
+              <DepthButton size="lg">{t("buttons.btn.large")}</DepthButton>
+            </div>
+          </div>
+          <div className={styles["button-card"]}>
+            <span className={styles["variant-label"]}>{t("buttons.variant.tiltOptIn")}</span>
+            <div className={styles["button-row"]}>
+              <DepthButton>{t("buttons.btn.default")}</DepthButton>
+              <DepthButton hoverTilt>{t("buttons.btn.hoverTilt")}</DepthButton>
+              <DepthButton ripple={false}>{t("buttons.btn.noRipple")}</DepthButton>
+            </div>
+          </div>
+          <div className={styles["button-card"]}>
+            <span className={styles["variant-label"]}>{t("buttons.variant.depthToggle")}</span>
+            <div className={styles["button-row"]}>
+              <DepthToggle pressed={readyPressed} onToggle={setReadyPressed} type="success">
+                {readyPressed ? t("buttons.toggle.ready") : t("buttons.toggle.standby")}
+              </DepthToggle>
+              <DepthToggle
+                pressed={pinPressed}
+                onToggle={setPinPressed}
+                type="secondary"
+                iconOnly
+                aria-label={pinPressed ? t("buttons.toggle.unpin") : t("buttons.toggle.pin")}
+                title={pinPressed ? t("buttons.toggle.pinned") : t("buttons.toggle.pinLabel")}
+              >
+                📌
+              </DepthToggle>
+              <DepthToggle pressed={infoPressed} onToggle={setInfoPressed} type="info">
+                {t("buttons.toggle.info")}
+              </DepthToggle>
+              <DepthToggle pressed={warningPressed} onToggle={setWarningPressed} type="warning">
+                {t("buttons.toggle.warning")}
+              </DepthToggle>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── GlitchButton ── */}
-      <section className={sharedStyles["theme-lab-section"]} aria-labelledby="section-glitch-btn">
-        <h2 id="section-glitch-btn" className={`${sharedStyles["theme-lab-section-title"]} ambient-section-title`}>
-          GlitchButton
-        </h2>
-        <p className={sharedStyles["section-caption"]}>
-          Hover or click to trigger chromatic aberration and scan-line distortion. Uses procedurally randomized clip-path slices.
-        </p>
-        <div className={styles["button-grid"]}>
-          <div className={styles["button-card"]}>
-            <span className={styles["variant-label"]}>Hover trigger — intensity</span>
-            <div className={styles["button-row"]}>
-              <GlitchButton intensity="subtle" trigger="hover">Subtle</GlitchButton>
-              <GlitchButton intensity="medium" trigger="hover">Medium</GlitchButton>
-              <GlitchButton intensity="heavy" trigger="hover">Heavy</GlitchButton>
-            </div>
-          </div>
-          <div className={styles["button-card"]}>
-            <span className={styles["variant-label"]}>Click trigger</span>
-            <div className={styles["button-row"]}>
-              <GlitchButton trigger="click">Click Me</GlitchButton>
-              <GlitchButton trigger="click" intensity="heavy">Click Heavy</GlitchButton>
-            </div>
-          </div>
-          <div className={styles["button-card"]}>
-            <span className={styles["variant-label"]}>Always on / Disabled</span>
-            <div className={styles["button-row"]}>
-              <GlitchButton trigger="always" intensity="subtle">Always</GlitchButton>
-              <GlitchButton disabled>Disabled</GlitchButton>
-            </div>
-          </div>
-          <div className={styles["button-card"]}>
-            <span className={styles["variant-label"]}>Custom color</span>
-            <div className={styles["button-row"]}>
-              <GlitchButton color={theme.palette.danger} trigger="hover">Danger Glitch</GlitchButton>
-              <GlitchButton color={theme.palette.success} trigger="hover">Success Glitch</GlitchButton>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── ShimmerButton ── */}
-      <section className={sharedStyles["theme-lab-section"]} aria-labelledby="section-shimmer-btn">
-        <h2 id="section-shimmer-btn" className={`${sharedStyles["theme-lab-section-title"]} ambient-section-title`}>
-          ShimmerButton
-        </h2>
-        <p className={sharedStyles["section-caption"]}>
-          Continuously animated shimmer sweep. Tracks an async <code>onPress</code> promise through loading → success phases.
-        </p>
-        <div className={styles["button-grid"]}>
-          <div className={styles["button-card"]}>
-            <span className={styles["variant-label"]}>Default shimmer</span>
-            <div className={styles["button-row"]}>
-              <ShimmerButton>Shimmer</ShimmerButton>
-              <ShimmerButton before="✨">With Icon</ShimmerButton>
-            </div>
-          </div>
-          <div className={styles["button-card"]}>
-            <span className={styles["variant-label"]}>Async press cycle</span>
-            <div className={styles["button-row"]}>
-              <ShimmerButton onPress={handleShimmerPress} loadingLabel="Saving…" resultLabel="Saved!">
-                Save Changes
-              </ShimmerButton>
-            </div>
-          </div>
-          <div className={styles["button-card"]}>
-            <span className={styles["variant-label"]}>Disabled</span>
-            <div className={styles["button-row"]}>
-              <ShimmerButton disabled>Disabled</ShimmerButton>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── LiquidButton ── */}
-      <section className={sharedStyles["theme-lab-section"]} aria-labelledby="section-liquid-btn">
-        <h2 id="section-liquid-btn" className={`${sharedStyles["theme-lab-section-title"]} ambient-section-title`}>
-          LiquidButton
-        </h2>
-        <p className={sharedStyles["section-caption"]}>
-          SVG turbulence filter morphs the border on hover. Viscosity controls how slowly the liquid warps.
-        </p>
-        <div className={styles["button-grid"]}>
-          <div className={styles["button-card"]}>
-            <span className={styles["variant-label"]}>Theme primary color</span>
-            <div className={styles["button-row"]}>
-              <LiquidButton>Liquid</LiquidButton>
-              <LiquidButton viscosity={0.4}>Fast (viscosity 0.4)</LiquidButton>
-            </div>
-          </div>
-          <div className={styles["button-card"]}>
-            <span className={styles["variant-label"]}>Custom colors</span>
-            <div className={styles["button-row"]}>
-              <LiquidButton color={theme.palette.success}>Success</LiquidButton>
-              <LiquidButton color={theme.palette.danger}>Danger</LiquidButton>
-            </div>
-          </div>
-          <div className={styles["button-card"]}>
-            <span className={styles["variant-label"]}>High viscosity / Disabled</span>
-            <div className={styles["button-row"]}>
-              <LiquidButton viscosity={3}>Slow (viscosity 3)</LiquidButton>
-              <LiquidButton disabled>Disabled</LiquidButton>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── ProgressButton ── */}
       <section className={sharedStyles["theme-lab-section"]} aria-labelledby="section-progress-btn">
         <h2 id="section-progress-btn" className={`${sharedStyles["theme-lab-section-title"]} ambient-section-title`}>
           ProgressButton
         </h2>
         <p className={sharedStyles["section-caption"]}>
-          Tracks an async operation lifecycle: idle → loading → success / error. Animated phase label transitions and a fake progress bar.
+          {t("buttons.progress.caption")}
         </p>
         <div className={styles["button-grid"]}>
           <div className={styles["button-card"]}>
-            <span className={styles["variant-label"]}>Bar indicator</span>
+            <span className={styles["variant-label"]}>{t("buttons.progress.bar")}</span>
             <div className={styles["button-row"]}>
               <ProgressButton
                 onPress={handleProgressPress}
-                loadingLabel="Uploading…"
-                successLabel="Uploaded!"
-                errorLabel="Upload failed"
+                loadingLabel={t("buttons.progress.uploading")}
+                successLabel={t("buttons.progress.uploaded")}
+                errorLabel={t("buttons.progress.uploadFailed")}
                 indicator="bar"
               >
-                Upload File
+                {t("buttons.progress.uploadFile")}
               </ProgressButton>
             </div>
           </div>
           <div className={styles["button-card"]}>
-            <span className={styles["variant-label"]}>Spinner indicator</span>
+            <span className={styles["variant-label"]}>{t("buttons.progress.spinner")}</span>
             <div className={styles["button-row"]}>
               <ProgressButton
                 onPress={handleProgressSpinnerPress}
-                loadingLabel="Fetching…"
-                successLabel="Done!"
+                loadingLabel={t("buttons.progress.fetching")}
+                successLabel={t("buttons.progress.done")}
                 indicator="spinner"
               >
-                Fetch Data
+                {t("buttons.progress.fetchData")}
               </ProgressButton>
             </div>
           </div>
           <div className={styles["button-card"]}>
-            <span className={styles["variant-label"]}>Error state demo</span>
+            <span className={styles["variant-label"]}>{t("buttons.progress.errorDemo")}</span>
             <div className={styles["button-row"]}>
               <ProgressButton
                 onPress={() =>
                   new Promise<void>((_, reject) =>
-                    setTimeout(() => reject(new Error("Network timeout")), 1200),
+                    setTimeout(() => reject(new Error(t("buttons.progress.networkTimeout"))), 1200),
                   )
                 }
-                successLabel="OK"
-                errorLabel="Network timeout"
+                successLabel={t("buttons.progress.ok")}
+                errorLabel={t("buttons.progress.networkTimeout")}
                 indicator="bar"
               >
-                Trigger Error
+                {t("buttons.progress.triggerError")}
               </ProgressButton>
             </div>
           </div>
           <div className={styles["button-card"]}>
-            <span className={styles["variant-label"]}>fakePress (auto-trigger)</span>
+            <span className={styles["variant-label"]}>{t("buttons.progress.fakePress")}</span>
             <div className={styles["button-row"]}>
               <ProgressButton
                 onPress={() => fakeAsync(1400)}
                 fakePress={progressLoading}
-                successLabel="Done!"
+                successLabel={t("buttons.progress.done")}
                 indicator="spinner"
               >
-                Auto Trigger
+                {t("buttons.progress.autoTrigger")}
               </ProgressButton>
               <button
                 type="button"
                 className={styles["demo-trigger"]}
-                onClick={() => setProgressLoading((v) => !v)}
+                onClick={() => setProgressLoading((value) => !value)}
               >
-                {progressLoading ? "Reset" : "Trigger"}
+                {progressLoading ? t("buttons.progress.reset") : t("buttons.progress.trigger")}
               </button>
             </div>
           </div>
           <div className={styles["button-card"]}>
-            <span className={styles["variant-label"]}>Disabled</span>
+            <span className={styles["variant-label"]}>{t("buttons.progress.disabled")}</span>
             <div className={styles["button-row"]}>
               <ProgressButton onPress={handleProgressPress} disabled>
-                Disabled
+                {t("buttons.progress.disabled")}
               </ProgressButton>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── SocialButton ── */}
       <section className={sharedStyles["theme-lab-section"]} aria-labelledby="section-social-btn">
         <h2 id="section-social-btn" className={`${sharedStyles["theme-lab-section-title"]} ambient-section-title`}>
           SocialButton
         </h2>
         <p className={sharedStyles["section-caption"]}>
-          Pre-styled social platform buttons with brand colors and icons. Supports href anchor mode and built-in share popup.
+          {t("buttons.social.caption")}
         </p>
         <div className={styles["button-grid"]}>
           <div className={styles["button-card"]}>
-            <span className={styles["variant-label"]}>GitHub &amp; Discord</span>
+            <span className={styles["variant-label"]}>{t("buttons.social.githubDiscord")}</span>
             <div className={styles["button-row"]}>
               <SocialButton platform="github" href="https://github.com" label="GitHub" />
               <SocialButton platform="discord" href="https://discord.com" label="Discord" />
             </div>
           </div>
           <div className={styles["button-card"]}>
-            <span className={styles["variant-label"]}>More platforms</span>
+            <span className={styles["variant-label"]}>{t("buttons.social.morePlatforms")}</span>
             <div className={styles["button-row"]}>
               <SocialButton platform="twitter" href="https://x.com" />
               <SocialButton platform="linkedin" href="https://linkedin.com" />
@@ -393,19 +241,19 @@ export function ZoneButtons({ zoneIndex }: ZoneProps) {
             </div>
           </div>
           <div className={styles["button-card"]}>
-            <span className={styles["variant-label"]}>Icon hidden / Disabled</span>
+            <span className={styles["variant-label"]}>{t("buttons.social.iconHiddenDisabled")}</span>
             <div className={styles["button-row"]}>
-              <SocialButton platform="github" hideIcon href="https://github.com" label="GitHub (no icon)" />
-              <SocialButton platform="discord" disabled label="Discord (disabled)" />
+              <SocialButton platform="github" hideIcon href="https://github.com" label={t("buttons.social.githubNoIcon")} />
+              <SocialButton platform="discord" disabled label={t("buttons.social.discordDisabled")} />
             </div>
           </div>
           <div className={styles["button-card"]}>
-            <span className={styles["variant-label"]}>Share popup</span>
+            <span className={styles["variant-label"]}>{t("buttons.social.sharePopup")}</span>
             <div className={styles["button-row"]}>
               <SocialButton
                 platform="twitter"
-                label="Share on X"
-                sharer={{ url: "https://infini-dev-kit.dev", message: "Check out Infini Dev Kit!" }}
+                label={t("buttons.social.shareOnX")}
+                sharer={{ url: "https://infini-dev-kit.dev", message: t("buttons.social.shareMessage") }}
               />
               <SocialButton
                 platform="facebook"
@@ -415,7 +263,45 @@ export function ZoneButtons({ zoneIndex }: ZoneProps) {
           </div>
         </div>
       </section>
+
+      <section className={sharedStyles["theme-lab-section"]} aria-labelledby="section-stylistic-btn">
+        <h2 id="section-stylistic-btn" className={`${sharedStyles["theme-lab-section-title"]} ambient-section-title`}>
+          Stylistic Buttons
+        </h2>
+        <p className={sharedStyles["section-caption"]}>
+          {t("buttons.stylistic.caption")}
+        </p>
+        <div className={styles["button-grid"]}>
+          <div className={styles["button-card"]}>
+            <span className={styles["variant-label"]}>{t("buttons.softClay.label")}</span>
+            <div className={styles["button-row"]}>
+              <SoftClayButton>{t("buttons.softClay.default")}</SoftClayButton>
+              <SoftClayButton color="var(--infini-color-accent)">{t("buttons.softClay.custom")}</SoftClayButton>
+            </div>
+          </div>
+          <div className={styles["button-card"]}>
+            <span className={styles["variant-label"]}>{t("buttons.liquidFill.label")}</span>
+            <div className={styles["button-row"]}>
+              <LiquidFillButton>{t("buttons.liquidFill.default")}</LiquidFillButton>
+              <LiquidFillButton fillColor="var(--infini-color-accent)">{t("buttons.liquidFill.custom")}</LiquidFillButton>
+            </div>
+          </div>
+          <div className={styles["button-card"]}>
+            <span className={styles["variant-label"]}>{t("buttons.crystalPrism.label")}</span>
+            <div className={styles["button-row"]}>
+              <CrystalPrismButton>{t("buttons.crystalPrism.default")}</CrystalPrismButton>
+            </div>
+          </div>
+          <div className={styles["button-card"]}>
+            <span className={styles["variant-label"]}>{t("buttons.slideReveal.label")}</span>
+            <div className={styles["button-row"]}>
+              <SlideRevealButton icon={<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" style={{ width: 16, height: 16 }}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>}>
+                {t("buttons.slideReveal.default")}
+              </SlideRevealButton>
+            </div>
+          </div>
+        </div>
+      </section>
     </section>
   );
 }
-

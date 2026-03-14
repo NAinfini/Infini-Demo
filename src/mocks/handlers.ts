@@ -61,6 +61,7 @@ export const handlers = [
   }),
 
   http.post(ROUTES.validate, async ({ request }) => {
+    await delay(80);
     const payload = (await request.json().catch(() => ({}))) as {
       email?: string;
       name?: string;

@@ -1,26 +1,31 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
-import { useThemeSnapshot } from "@infini-dev-kit/frontend/provider";
+import { useThemeSnapshot } from "../../providers/DemoThemeProvider";
+import { useT } from "../../i18n";
 import {
-  InfiniCard,
-  RevealCard,
-  LayeredCard,
-  FlipCard,
-  TiltCard,
-  ChibiCard,
-  NeuBrutalCard,
-  CyberpunkCard,
-  GlowCard,
-  GlassEffect,
-  GlitchOverlay,
-  MatrixCodeRain,
+  AnimatedCodeBlock,
   BubbleBackground,
+  ChibiCard,
+  CosmicGlowEffect,
+  DepthButton,
+  DirectionalRevealEffect,
+  Flip3DEffect,
+  GlassEffect,
+  GlitchGlowEffect,
+  GlitchOverlay,
   GrainyBackground,
   ImageComparison,
   ImageScanner,
-  AnimatedCodeBlock,
+  LaserGlowEffect,
+  MatrixCodeRain,
+  NeonScanlinesEffect,
+  NeuBrutalCard,
+  ParallaxLayerEffect,
+  SpotlightGlowEffect,
   Terminal,
+  Tilt3DEffect,
 } from "@infini-dev-kit/frontend/components";
+import { usePowerGlitch } from "@infini-dev-kit/frontend/hooks";
 import { HoverCard as MantineHoverCard } from "@mantine/core";
 
 import type { ZoneProps } from "./types";
@@ -41,75 +46,123 @@ const TERMINAL_COMMANDS = [
 
 export function ZoneVisualEffects({ zoneIndex }: ZoneProps) {
   const { theme } = useThemeSnapshot();
+  const t = useT("theme-lab");
   const [flipState, setFlipState] = useState(false);
+  const hoverPowerGlitch = usePowerGlitch<HTMLDivElement>(useMemo(
+    () => ({
+      playMode: "hover",
+      hideOverflow: true,
+      slice: {
+        count: 8,
+        velocity: 18,
+        minHeight: 0.03,
+        maxHeight: 0.16,
+      },
+      pulse: {
+        scale: 1.03,
+      },
+    }),
+    [],
+  ));
+  const manualPowerGlitch = usePowerGlitch<HTMLDivElement>(useMemo(
+    () => ({
+      playMode: "manual",
+      hideOverflow: true,
+      timing: {
+        duration: 1200,
+        iterations: Number.POSITIVE_INFINITY,
+      },
+      glitchTimeSpan: {
+        start: 0.15,
+        end: 0.85,
+      },
+      shake: {
+        velocity: 18,
+        amplitudeX: 0.18,
+        amplitudeY: 0.08,
+      },
+      slice: {
+        count: 10,
+        velocity: 20,
+        minHeight: 0.02,
+        maxHeight: 0.18,
+        hueRotate: true,
+        cssFilters: "",
+      },
+      pulse: {
+        scale: 1.08,
+      },
+    }),
+    [],
+  ));
 
   return (
     <section
       data-zone-index={zoneIndex}
       className={`${layoutStyles.zone} ${layoutStyles["theme-zone"]} zone-visual-effects stagger-in`}
     >
-      <div className={`${layoutStyles["zone-label"]} ambient-label`}>Visual Effects</div>
+      <div className={`${layoutStyles["zone-label"]} ambient-label`}>{t("zone.visualEffects")}</div>
 
       {/* ── Section: Cards ── */}
       <section className={sharedStyles["theme-lab-section"]} aria-labelledby="section-ve-cards">
         <h2 id="section-ve-cards" className={`${sharedStyles["theme-lab-section-title"]} ambient-section-title`}>
-          Cards
+          {t("ve.cards.title")}
         </h2>
         <div className={styles["ve-grid"]}>
 
-          {/* InfiniCard */}
+          {/* TiltCard row */}
           <article className={styles["ve-card"]}>
-            <div className={styles["ve-card-title"]}>InfiniCard — Auto-dispatch</div>
+            <div className={styles["ve-card-title"]}>{t("ve.tiltCard.statTitle")}</div>
             <div className={styles["ve-infini-cards-row"]}>
-              <InfiniCard className={styles["ve-infini-card"]}>
+              <Tilt3DEffect className={styles["ve-infini-card"]}>
                 <div className={styles["ve-infini-card-body"]}>
-                  <div className={styles["ve-infini-card-label"]}>Alpha</div>
+                  <div className={styles["ve-infini-card-label"]}>{t("ve.alpha")}</div>
                   <div className={styles["ve-infini-card-value"]} style={{ color: theme.palette.primary }}>
                     24.8k
                   </div>
                 </div>
-              </InfiniCard>
-              <InfiniCard className={styles["ve-infini-card"]}>
+              </Tilt3DEffect>
+              <Tilt3DEffect className={styles["ve-infini-card"]}>
                 <div className={styles["ve-infini-card-body"]}>
-                  <div className={styles["ve-infini-card-label"]}>Beta</div>
+                  <div className={styles["ve-infini-card-label"]}>{t("ve.beta")}</div>
                   <div className={styles["ve-infini-card-value"]} style={{ color: theme.palette.accent }}>
                     9.1k
                   </div>
                 </div>
-              </InfiniCard>
-              <InfiniCard className={styles["ve-infini-card"]}>
+              </Tilt3DEffect>
+              <Tilt3DEffect className={styles["ve-infini-card"]}>
                 <div className={styles["ve-infini-card-body"]}>
-                  <div className={styles["ve-infini-card-label"]}>Gamma</div>
+                  <div className={styles["ve-infini-card-label"]}>{t("ve.gamma")}</div>
                   <div className={styles["ve-infini-card-value"]} style={{ color: theme.palette.secondary }}>
                     3.5k
                   </div>
                 </div>
-              </InfiniCard>
+              </Tilt3DEffect>
             </div>
-            <div className={sharedStyles["section-caption"]}>Dispatches to TiltCard / GlowCard / CyberpunkCard per active theme</div>
+            <div className={sharedStyles["section-caption"]}>{t("ve.tiltCard.statCaption")}</div>
           </article>
 
           {/* HoverCard */}
           <article className={styles["ve-card"]}>
-            <div className={styles["ve-card-title"]}>Mantine HoverCard</div>
+            <div className={styles["ve-card-title"]}>{t("ve.hoverCard.title")}</div>
             <div className={styles["ve-hover-card-stage"]}>
               <MantineHoverCard width={260} position="top" withArrow shadow="md">
                 <MantineHoverCard.Target>
                   <span className={styles["ve-hover-trigger"]}>
-                    Hover for theme info
+                    {t("ve.hoverCard.trigger")}
                   </span>
                 </MantineHoverCard.Target>
                 <MantineHoverCard.Dropdown>
                   <div className={styles["ve-hover-content"]}>
-                    <div className={styles["ve-hover-content-title"]}>Theme Details</div>
+                    <div className={styles["ve-hover-content-title"]}>{t("ve.hoverCard.details")}</div>
                     <div className={styles["ve-hover-content-row"]}>
-                      <span>Primary</span>
+                      <span>{t("ve.primary")}</span>
                       <span style={{ color: theme.palette.primary, fontFamily: theme.typography.en.mono, fontSize: 11 }}>
                         {theme.palette.primary}
                       </span>
                     </div>
                     <div className={styles["ve-hover-content-row"]}>
-                      <span>Accent</span>
+                      <span>{t("ve.accent")}</span>
                       <span style={{ color: theme.palette.accent, fontFamily: theme.typography.en.mono, fontSize: 11 }}>
                         {theme.palette.accent}
                       </span>
@@ -118,34 +171,34 @@ export function ZoneVisualEffects({ zoneIndex }: ZoneProps) {
                 </MantineHoverCard.Dropdown>
               </MantineHoverCard>
             </div>
-            <div className={sharedStyles["section-caption"]}>Mantine HoverCard with themed content.</div>
+            <div className={sharedStyles["section-caption"]}>{t("ve.hoverCard.caption")}</div>
           </article>
 
           {/* RevealCard */}
           <article className={styles["ve-card"]}>
-            <div className={styles["ve-card-title"]}>RevealCard</div>
-            <RevealCard
+            <div className={styles["ve-card-title"]}>{t("ve.revealCard.title")}</div>
+            <DirectionalRevealEffect
               direction="up"
               revealContent={
                 <div className={styles["ve-reveal-content"]}>
-                  <div className={styles["ve-reveal-title"]}>Revealed</div>
-                  <div className={styles["ve-reveal-sub"]}>Slides in from below</div>
+                  <div className={styles["ve-reveal-title"]}>{t("ve.revealCard.revealed")}</div>
+                  <div className={styles["ve-reveal-sub"]}>{t("ve.revealCard.slidesIn")}</div>
                 </div>
               }
             >
               <div className={styles["ve-reveal-base"]}>
                 <div className={styles["ve-reveal-icon"]}>&#9650;</div>
-                <div>Hover to reveal</div>
+                <div>{t("ve.revealCard.hover")}</div>
               </div>
-            </RevealCard>
-            <div className={sharedStyles["section-caption"]}>Directional slide-reveal overlay on hover</div>
+            </DirectionalRevealEffect>
+            <div className={sharedStyles["section-caption"]}>{t("ve.revealCard.caption")}</div>
           </article>
 
           {/* LayeredCard */}
           <article className={styles["ve-card"]}>
-            <div className={styles["ve-card-title"]}>LayeredCard — 3D Parallax</div>
+            <div className={styles["ve-card-title"]}>{t("ve.layeredCard.title")}</div>
             <div className={styles["ve-layered-wrap"]}>
-              <LayeredCard
+              <ParallaxLayerEffect
                 tiltDegree={12}
                 layerDepth={25}
                 layers={[
@@ -194,12 +247,12 @@ export function ZoneVisualEffects({ zoneIndex }: ZoneProps) {
                 ]}
               />
             </div>
-            <div className={sharedStyles["section-caption"]}>Mouse over to see parallax depth separation</div>
+            <div className={sharedStyles["section-caption"]}>{t("ve.layeredCard.caption")}</div>
           </article>
 
           {/* GlassEffect */}
           <article className={styles["ve-card"]}>
-            <div className={styles["ve-card-title"]}>GlassEffect</div>
+            <div className={styles["ve-card-title"]}>{t("ve.glass.title")}</div>
             <div
               className={styles["ve-glass-stage"]}
               style={{
@@ -208,12 +261,12 @@ export function ZoneVisualEffects({ zoneIndex }: ZoneProps) {
             >
               <GlassEffect blur={14} opacity={0.18} borderOpacity={0.25} className={styles["ve-glass-panel"]}>
                 <div className={styles["ve-glass-content"]}>
-                  <div className={styles["ve-glass-title"]}>Glass Panel</div>
-                  <div className={styles["ve-glass-sub"]}>Frosted glassmorphism via backdrop-filter</div>
+                  <div className={styles["ve-glass-title"]}>{t("ve.glass.panel")}</div>
+                  <div className={styles["ve-glass-sub"]}>{t("ve.glass.sub")}</div>
                 </div>
               </GlassEffect>
             </div>
-            <div className={sharedStyles["section-caption"]}>Apple-style frosted glass with specular highlight</div>
+            <div className={sharedStyles["section-caption"]}>{t("ve.glass.caption")}</div>
           </article>
 
           {/* GlitchOverlay */}
@@ -240,12 +293,70 @@ export function ZoneVisualEffects({ zoneIndex }: ZoneProps) {
                 </div>
               </GlitchOverlay>
             </div>
-            <div className={sharedStyles["section-caption"]}>Hover to trigger chromatic aberration glitch burst</div>
+            <div className={sharedStyles["section-caption"]}>{t("ve.glitch.caption")}</div>
+          </article>
+
+          {/* PowerGlitch */}
+          <article className={styles["ve-card"]}>
+            <div className={styles["ve-card-title"]}>PowerGlitch</div>
+            <div style={{ display: "grid", gap: 12 }}>
+              <div ref={hoverPowerGlitch.ref} className={styles["ve-glitch-stage"]}>
+                <div
+                  className={styles["ve-glitch-target"]}
+                  style={{
+                    fontFamily: theme.typography.en.mono,
+                    color: theme.palette.primary,
+                    border: `1px solid ${theme.foundation.borderColor}`,
+                    borderRadius: theme.foundation.radius,
+                    padding: "16px 24px",
+                    fontSize: 18,
+                    fontWeight: 700,
+                    letterSpacing: "0.08em",
+                    background: theme.foundation.surface,
+                    textTransform: "uppercase",
+                    userSelect: "none",
+                  }}
+                >
+                  Hover Signal
+                </div>
+              </div>
+              <div ref={manualPowerGlitch.ref} className={styles["ve-glitch-stage"]}>
+                <div
+                  className={styles["ve-glitch-target"]}
+                  style={{
+                    fontFamily: theme.typography.en.mono,
+                    color: theme.palette.accent,
+                    border: `1px solid ${theme.foundation.borderColor}`,
+                    borderRadius: theme.foundation.radius,
+                    padding: "16px 24px",
+                    fontSize: 18,
+                    fontWeight: 700,
+                    letterSpacing: "0.08em",
+                    background: theme.foundation.surface,
+                    textTransform: "uppercase",
+                    userSelect: "none",
+                  }}
+                >
+                  Manual Loop
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                <DepthButton size="sm" onClick={() => manualPowerGlitch.startGlitch()}>
+                  Start Loop
+                </DepthButton>
+                <DepthButton size="sm" type="secondary" onClick={() => manualPowerGlitch.stopGlitch()}>
+                  Stop Loop
+                </DepthButton>
+              </div>
+            </div>
+            <div className={sharedStyles["section-caption"]}>
+              Recreated from the upstream PowerGlitch library inside Dev Kit. Top target uses hover mode; bottom target uses manual mode with explicit start/stop controls.
+            </div>
           </article>
 
           {/* ImageComparison */}
           <article className={styles["ve-card"]}>
-            <div className={styles["ve-card-title"]}>ImageComparison</div>
+            <div className={styles["ve-card-title"]}>{t("ve.comparison.title")}</div>
             <ImageComparison
               before={
                 <div
@@ -262,7 +373,7 @@ export function ZoneVisualEffects({ zoneIndex }: ZoneProps) {
                     fontWeight: 600,
                   }}
                 >
-                  Primary
+                  {t("ve.comparison.primary")}
                 </div>
               }
               after={
@@ -280,19 +391,19 @@ export function ZoneVisualEffects({ zoneIndex }: ZoneProps) {
                     fontWeight: 600,
                   }}
                 >
-                  Accent
+                  {t("ve.comparison.accent")}
                 </div>
               }
-              beforeLabel="Primary"
-              afterLabel="Accent"
+              beforeLabel={t("ve.comparison.primary")}
+              afterLabel={t("ve.comparison.accent")}
               height={150}
             />
-            <div className={sharedStyles["section-caption"]}>Drag the handle to compare theme colors</div>
+            <div className={sharedStyles["section-caption"]}>{t("ve.comparison.caption")}</div>
           </article>
 
           {/* ImageScanner */}
           <article className={styles["ve-card"]}>
-            <div className={styles["ve-card-title"]}>ImageScanner</div>
+            <div className={styles["ve-card-title"]}>{t("ve.scanner.title")}</div>
             <ImageScanner direction="down" duration={2.5} loop>
               <div
                 className={styles["ve-scanner-target"]}
@@ -337,24 +448,24 @@ export function ZoneVisualEffects({ zoneIndex }: ZoneProps) {
                 </div>
               </div>
             </ImageScanner>
-            <div className={sharedStyles["section-caption"]}>Futuristic scan line with corner brackets</div>
+            <div className={sharedStyles["section-caption"]}>{t("ve.scanner.caption")}</div>
           </article>
 
           {/* FlipCard */}
           <article className={styles["ve-card"]}>
-            <div className={styles["ve-card-title"]}>FlipCard</div>
+            <div className={styles["ve-card-title"]}>{t("ve.flip.title")}</div>
             <div className={styles["ve-flip-stage"]}>
-              <FlipCard
+              <Flip3DEffect
                 front={
                   <div className={styles["ve-flip-face"]} style={{ background: theme.foundation.surface, border: `1px solid ${theme.foundation.borderColor}`, borderRadius: theme.foundation.radius }}>
-                    <div style={{ fontFamily: theme.typography.en.heading, fontWeight: 700, fontSize: 16 }}>Front</div>
-                    <div style={{ fontSize: 11, opacity: 0.6 }}>Click to flip</div>
+                    <div style={{ fontFamily: theme.typography.en.heading, fontWeight: 700, fontSize: 16 }}>{t("ve.flip.front")}</div>
+                    <div style={{ fontSize: 11, opacity: 0.6 }}>{t("ve.flip.clickToFlip")}</div>
                   </div>
                 }
                 back={
                   <div className={styles["ve-flip-face"]} style={{ background: `color-mix(in srgb, ${theme.palette.primary} 12%, ${theme.foundation.surface})`, border: `1px solid ${theme.palette.primary}`, borderRadius: theme.foundation.radius }}>
-                    <div style={{ fontFamily: theme.typography.en.heading, fontWeight: 700, fontSize: 16, color: theme.palette.primary }}>Back</div>
-                    <div style={{ fontSize: 11, opacity: 0.6 }}>Click again</div>
+                    <div style={{ fontFamily: theme.typography.en.heading, fontWeight: 700, fontSize: 16, color: theme.palette.primary }}>{t("ve.flip.back")}</div>
+                    <div style={{ fontSize: 11, opacity: 0.6 }}>{t("ve.flip.clickAgain")}</div>
                   </div>
                 }
                 flipped={flipState}
@@ -362,19 +473,19 @@ export function ZoneVisualEffects({ zoneIndex }: ZoneProps) {
                 className={styles["ve-flip-card"]}
               />
             </div>
-            <div className={sharedStyles["section-caption"]}>Click-to-flip with 3D CSS perspective and motion gating</div>
+            <div className={sharedStyles["section-caption"]}>{t("ve.flip.caption")}</div>
           </article>
 
-          {/* TiltCard */}
+          {/* Tilt3DEffect */}
           <article className={styles["ve-card"]}>
-            <div className={styles["ve-card-title"]}>TiltCard</div>
-            <TiltCard className={styles["ve-standalone-card"]}>
+            <div className={styles["ve-card-title"]}>Tilt3DEffect</div>
+            <Tilt3DEffect className={styles["ve-standalone-card"]}>
               <div className={styles["ve-standalone-card-body"]}>
-                <div className={styles["ve-standalone-card-label"]}>TiltCard</div>
-                <div style={{ fontSize: 11, opacity: 0.6 }}>Move cursor to tilt</div>
+                <div className={styles["ve-standalone-card-label"]}>Tilt3DEffect</div>
+                <div style={{ fontSize: 11, opacity: 0.6 }}>{t("ve.tiltCard.moveCursor")}</div>
               </div>
-            </TiltCard>
-            <div className={sharedStyles["section-caption"]}>3D perspective tilt following cursor position with radial glow</div>
+            </Tilt3DEffect>
+            <div className={sharedStyles["section-caption"]}>{t("ve.tiltCard.caption")}</div>
           </article>
 
           {/* ChibiCard */}
@@ -383,10 +494,10 @@ export function ZoneVisualEffects({ zoneIndex }: ZoneProps) {
             <ChibiCard className={styles["ve-standalone-card"]}>
               <div className={styles["ve-standalone-card-body"]}>
                 <div className={styles["ve-standalone-card-label"]}>ChibiCard</div>
-                <div style={{ fontSize: 11, opacity: 0.6 }}>Soft float on hover</div>
+                <div style={{ fontSize: 11, opacity: 0.6 }}>{t("ve.chibi.softFloat")}</div>
               </div>
             </ChibiCard>
-            <div className={sharedStyles["section-caption"]}>Kawaii sticker-card with cloud shadows and gentle lift</div>
+            <div className={sharedStyles["section-caption"]}>{t("ve.chibi.caption")}</div>
           </article>
 
           {/* NeuBrutalCard */}
@@ -395,67 +506,67 @@ export function ZoneVisualEffects({ zoneIndex }: ZoneProps) {
             <NeuBrutalCard className={styles["ve-standalone-card"]}>
               <div className={styles["ve-standalone-card-body"]}>
                 <div className={styles["ve-standalone-card-label"]}>NeuBrutalCard</div>
-                <div style={{ fontSize: 11, opacity: 0.6 }}>Hard shadow shift</div>
+                <div style={{ fontSize: 11, opacity: 0.6 }}>{t("ve.neuBrutal.hardShadow")}</div>
               </div>
             </NeuBrutalCard>
-            <div className={sharedStyles["section-caption"]}>Bold borders, zero radius, offset shadow that shifts on hover</div>
+            <div className={sharedStyles["section-caption"]}>{t("ve.neuBrutal.caption")}</div>
           </article>
 
-          {/* CyberpunkCard */}
+          {/* NeonScanlinesEffect */}
           <article className={styles["ve-card"]}>
-            <div className={styles["ve-card-title"]}>CyberpunkCard</div>
-            <CyberpunkCard className={styles["ve-standalone-card"]}>
+            <div className={styles["ve-card-title"]}>NeonScanlinesEffect</div>
+            <NeonScanlinesEffect className={styles["ve-standalone-card"]}>
               <div className={styles["ve-standalone-card-body"]}>
-                <div className={styles["ve-standalone-card-label"]} style={{ color: theme.palette.accent }}>CyberpunkCard</div>
+                <div className={styles["ve-standalone-card-label"]} style={{ color: theme.palette.accent }}>NeonScanlinesEffect</div>
                 <div style={{ fontSize: 11, opacity: 0.6, fontFamily: theme.typography.en.mono }}>NEON // SCANLINES</div>
               </div>
-            </CyberpunkCard>
-            <div className={sharedStyles["section-caption"]}>Neon borders, animated scanlines, clipped corners, pulse glow</div>
+            </NeonScanlinesEffect>
+            <div className={sharedStyles["section-caption"]}>{t("ve.cyberpunk.caption")}</div>
           </article>
 
-          {/* GlowCard variants */}
+          {/* Glow Effect variants */}
           <article className={styles["ve-card"]}>
-            <div className={styles["ve-card-title"]}>GlowCard — Spotlight</div>
-            <GlowCard variant="spotlight" className={styles["ve-standalone-card"]}>
+            <div className={styles["ve-card-title"]}>SpotlightGlowEffect</div>
+            <SpotlightGlowEffect className={styles["ve-standalone-card"]}>
               <div className={styles["ve-standalone-card-body"]}>
-                <div className={styles["ve-standalone-card-label"]}>Spotlight</div>
-                <div style={{ fontSize: 11, opacity: 0.6 }}>Mouse-following radial glow</div>
+                <div className={styles["ve-standalone-card-label"]}>{t("ve.glow.spotlight")}</div>
+                <div style={{ fontSize: 11, opacity: 0.6 }}>{t("ve.glow.spotlightSub")}</div>
               </div>
-            </GlowCard>
-            <div className={sharedStyles["section-caption"]}>Default variant — radial gradient follows the cursor</div>
-          </article>
-
-          <article className={styles["ve-card"]}>
-            <div className={styles["ve-card-title"]}>GlowCard — Laser</div>
-            <GlowCard variant="laser" className={styles["ve-standalone-card"]}>
-              <div className={styles["ve-standalone-card-body"]}>
-                <div className={styles["ve-standalone-card-label"]}>Laser</div>
-                <div style={{ fontSize: 11, opacity: 0.6 }}>Crosshair + conic gradient</div>
-              </div>
-            </GlowCard>
-            <div className={sharedStyles["section-caption"]}>Rotating conic gradient at cursor with crosshair reticle lines</div>
+            </SpotlightGlowEffect>
+            <div className={sharedStyles["section-caption"]}>{t("ve.glow.spotlightCaption")}</div>
           </article>
 
           <article className={styles["ve-card"]}>
-            <div className={styles["ve-card-title"]}>GlowCard — Cosmic</div>
-            <GlowCard variant="cosmic" className={styles["ve-standalone-card"]}>
+            <div className={styles["ve-card-title"]}>LaserGlowEffect</div>
+            <LaserGlowEffect className={styles["ve-standalone-card"]}>
               <div className={styles["ve-standalone-card-body"]}>
-                <div className={styles["ve-standalone-card-label"]}>Cosmic</div>
-                <div style={{ fontSize: 11, opacity: 0.6 }}>Particle nebula physics</div>
+                <div className={styles["ve-standalone-card-label"]}>{t("ve.glow.laser")}</div>
+                <div style={{ fontSize: 11, opacity: 0.6 }}>{t("ve.glow.laserSub")}</div>
               </div>
-            </GlowCard>
-            <div className={sharedStyles["section-caption"]}>Velocity-decay particles spawn at cursor with nebula backdrop</div>
+            </LaserGlowEffect>
+            <div className={sharedStyles["section-caption"]}>{t("ve.glow.laserCaption")}</div>
           </article>
 
           <article className={styles["ve-card"]}>
-            <div className={styles["ve-card-title"]}>GlowCard — Glitch</div>
-            <GlowCard variant="glitch" className={styles["ve-standalone-card"]}>
+            <div className={styles["ve-card-title"]}>CosmicGlowEffect</div>
+            <CosmicGlowEffect className={styles["ve-standalone-card"]}>
               <div className={styles["ve-standalone-card-body"]}>
-                <div className={styles["ve-standalone-card-label"]}>Glitch</div>
-                <div style={{ fontSize: 11, opacity: 0.6 }}>Scanline + noise flicker</div>
+                <div className={styles["ve-standalone-card-label"]}>{t("ve.glow.cosmic")}</div>
+                <div style={{ fontSize: 11, opacity: 0.6 }}>{t("ve.glow.cosmicSub")}</div>
               </div>
-            </GlowCard>
-            <div className={sharedStyles["section-caption"]}>Horizontal scanlines with random glitch bar and flicker</div>
+            </CosmicGlowEffect>
+            <div className={sharedStyles["section-caption"]}>{t("ve.glow.cosmicCaption")}</div>
+          </article>
+
+          <article className={styles["ve-card"]}>
+            <div className={styles["ve-card-title"]}>GlitchGlowEffect</div>
+            <GlitchGlowEffect className={styles["ve-standalone-card"]}>
+              <div className={styles["ve-standalone-card-body"]}>
+                <div className={styles["ve-standalone-card-label"]}>{t("ve.glow.glitch")}</div>
+                <div style={{ fontSize: 11, opacity: 0.6 }}>{t("ve.glow.glitchSub")}</div>
+              </div>
+            </GlitchGlowEffect>
+            <div className={sharedStyles["section-caption"]}>{t("ve.glow.glitchCaption")}</div>
           </article>
 
         </div>
@@ -464,7 +575,7 @@ export function ZoneVisualEffects({ zoneIndex }: ZoneProps) {
       {/* ── Section: Code ── */}
       <section className={sharedStyles["theme-lab-section"]} aria-labelledby="section-ve-code">
         <h2 id="section-ve-code" className={`${sharedStyles["theme-lab-section-title"]} ambient-section-title`}>
-          Animated Code Block
+          {t("ve.code.title")}
         </h2>
         <AnimatedCodeBlock
           code={DEMO_CODE}
@@ -474,13 +585,13 @@ export function ZoneVisualEffects({ zoneIndex }: ZoneProps) {
           autoStart
           className={styles["ve-code-block"]}
         />
-        <div className={sharedStyles["section-caption"]}>Characters typed out at configurable speed with blinking cursor</div>
+        <div className={sharedStyles["section-caption"]}>{t("ve.code.caption")}</div>
       </section>
 
       {/* ── Section: Terminal ── */}
       <section className={sharedStyles["theme-lab-section"]} aria-labelledby="section-ve-terminal">
         <h2 id="section-ve-terminal" className={`${sharedStyles["theme-lab-section-title"]} ambient-section-title`}>
-          Terminal
+          {t("ve.terminal.title")}
         </h2>
         <Terminal
           commands={TERMINAL_COMMANDS}
@@ -489,13 +600,25 @@ export function ZoneVisualEffects({ zoneIndex }: ZoneProps) {
           loop
           className={styles["ve-code-block"]}
         />
-        <div className={sharedStyles["section-caption"]}>Simulated CLI with macOS chrome, command typing, and output reveal</div>
+        <div className={sharedStyles["section-caption"]}>{t("ve.code.caption")}</div>
+      </section>
+
+      {/* ── Section: Terminal ── */}
+      <section className={sharedStyles["theme-lab-section"]} aria-labelledby="section-ve-terminal">
+        <h2 id="section-ve-terminal" className={`${sharedStyles["theme-lab-section-title"]} ambient-section-title`}>
+          {t("ve.terminal.title")}
+        </h2>
+        <Terminal
+          commands={TERMINAL_COMMANDS}
+          className={styles["ve-terminal"]}
+        />
+        <div className={sharedStyles["section-caption"]}>{t("ve.terminal.caption")}</div>
       </section>
 
       {/* ── Section: Backgrounds (full-width) ── */}
       <section className={sharedStyles["theme-lab-section"]} aria-labelledby="section-ve-bg">
         <h2 id="section-ve-bg" className={`${sharedStyles["theme-lab-section-title"]} ambient-section-title`}>
-          Backgrounds
+          {t("ve.bg.title")}
         </h2>
         <div className={styles["ve-bg-grid"]}>
 
@@ -505,7 +628,7 @@ export function ZoneVisualEffects({ zoneIndex }: ZoneProps) {
             <div className={styles["ve-bg-container"]}>
               <MatrixCodeRain height={150} speed={1.2} density={0.55} fontSize={13} />
             </div>
-            <div className={sharedStyles["section-caption"]}>Canvas-based falling character rain, color from theme primary</div>
+            <div className={sharedStyles["section-caption"]}>{t("ve.bg.matrixCaption")}</div>
           </div>
 
           {/* BubbleBackground */}
@@ -525,7 +648,7 @@ export function ZoneVisualEffects({ zoneIndex }: ZoneProps) {
                 floating bubbles
               </div>
             </BubbleBackground>
-            <div className={sharedStyles["section-caption"]}>Seeded floating bubble particles from theme palette</div>
+            <div className={sharedStyles["section-caption"]}>{t("ve.bg.bubbleCaption")}</div>
           </div>
 
           {/* GrainyBackground */}
@@ -545,7 +668,7 @@ export function ZoneVisualEffects({ zoneIndex }: ZoneProps) {
                 grainy texture
               </div>
             </GrainyBackground>
-            <div className={sharedStyles["section-caption"]}>SVG feTurbulence grain over animated gradient</div>
+            <div className={sharedStyles["section-caption"]}>{t("ve.bg.grainyCaption")}</div>
           </div>
 
         </div>

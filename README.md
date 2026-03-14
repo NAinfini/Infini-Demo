@@ -95,19 +95,23 @@ Interactive API client that fires real (mocked) HTTP requests and displays reque
 1. **`main.tsx`** boots MSW (in dev) then mounts the React tree
 2. **`KitApp`** wraps the app with the theme bridge — a reactive store holding theme ID, motion preferences, and resolved design tokens
 3. **`ThemeToolbar`** picks theme + motion level → triggers a View Transition, dynamically loads fonts, enables scroll-reactive CSS vars
-4. **`ThemeLab`** renders **10 zones**, each showcasing a slice of the design system:
+4. **`ThemeLab`** renders **14 zones**, each showcasing a slice of the design system:
 
    | Zone | What it shows |
    |:-----|:--------------|
-   | 🏠 Hero | Intro banner |
-   | 🎨 Foundation | Palette, typography, spacing |
-   | 🔘 Buttons | Button variants (motion, depth, shimmer, liquid, glitch, etc.) |
+   | 🏠 Hero | Intro banner, headline effects, magnetic elements |
+   | 🎨 Foundation | Palette, typography, spacing, counters, borders |
+   | 🔘 Buttons | Button variants (motion, depth, shimmer, liquid, glitch, progress, social) |
    | ✏️ Inputs | Text inputs, selects, sliders, switches |
-   | 🧭 Navigation | Tabs, breadcrumbs, pagination, steppers, sidebar |
-   | 💬 Feedback | Alerts, notifications, modals, skeletons |
-   | ✨ Visual Effects | Cards, backgrounds, text effects, borders |
+   | 🎛️ Controls | Color picker, tag input, date range picker |
+   | 🧭 Navigation | Tabs, marquee, stepper |
+   | 💬 Feedback | Number ticker, result states, ring progress |
+   | 📊 Data Display | Stat cards, timelines, tables, kanban, calendar |
+   | 📐 Layout | Page header, split view, responsive grid |
+   | ✨ Visual Effects | Cards, backgrounds, text effects, borders, code blocks |
+   | 🎁 Extras | Confetti, reveal on scroll, command palette |
    | 📈 Charts | ECharts visualizations, theme-aware |
-   | 🎬 Motion | Spring / keyframe animations |
+   | 🎬 Motion | Spring / keyframe animations, parallax, stagger, cursor |
    | 🔧 Internals | Dev-facing tokens & contracts |
 
 5. **`ApiLab`** fires requests against MSW handlers, displaying raw traces and parsed responses
@@ -166,6 +170,13 @@ pnpm build     # tsc -b && vite build
 pnpm preview   # serve production bundle locally
 ```
 
+### Security defaults
+
+- Dev and preview responses include baseline security headers (`CSP`, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `COOP`).
+- CSP is configured to allow local module scripts, HMR websocket connections, and Google Fonts used by theme font loading.
+- MSW unhandled requests default to `error` in development. To override explicitly, set `VITE_MSW_UNHANDLED_REQUEST=warn` or `VITE_MSW_UNHANDLED_REQUEST=bypass`.
+- For production deployment, mirror these headers at the edge/CDN and add `Strict-Transport-Security` on HTTPS hosts.
+
 ---
 
 ## 📁 Project Structure
@@ -186,7 +197,7 @@ src/
         ├── data.ts             # 📊 Mock data (tables, trees, cascaders)
         ├── types.ts            # 🔷 Shared ZoneProps interface
         ├── shared.module.css   # 🎨 Cross-zone CSS module
-        ├── Zone*.tsx           # 🧩 10 zone components
+        ├── Zone*.tsx           # 🧩 14 zone components
         └── Zone*.module.css    # 💅 Per-zone CSS modules
 ```
 

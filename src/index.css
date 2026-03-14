@@ -12,9 +12,6 @@ html {
 
 body {
   font-family: sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
   font-feature-settings: "kern" 1, "liga" 1;
   font-kerning: normal;
   font-variant-ligatures: common-ligatures;
@@ -27,18 +24,35 @@ html, body, #root {
   min-height: 100%;
 }
 
-* {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-}
-
 .app-page-shell {
+  background-color: var(--app-bg);
+  background-image: var(--app-bg-pattern);
+  color: var(--app-text);
+  font-family: var(--app-font);
   transition:
     background-color 300ms ease,
     color 300ms ease,
     border-color 300ms ease,
     box-shadow 300ms ease;
+}
+
+@media (forced-colors: active) {
+  .app-page-shell {
+    background-color: Canvas;
+    color: CanvasText;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .app-page-shell.app-motion-off {

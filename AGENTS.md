@@ -76,11 +76,11 @@ pnpm preview    # Serve production bundle locally
 
 ### src/pages/theme-lab/ — ThemeLab Zone System
 
-ThemeLab is organized into **zones** — each zone showcases a different slice of the design system.
+ThemeLab is organized into **zones** — each zone showcases a different slice of the design system. The UI groups multiple zones into a smaller set of top-level tabs so the navigation stays compact.
 
 | File | Purpose |
 |------|---------|
-| `ThemeLab.tsx` | Zone orchestrator — renders all zones in order |
+| `ThemeLab.tsx` | Zone orchestrator — groups zones into a smaller tab set |
 | `types.ts` | `ZoneProps` interface (shared by all zones) |
 | `data.ts` | Mock data for tables, trees, cascaders |
 | `shared.module.css` | Cross-zone shared CSS module |
@@ -91,16 +91,22 @@ ThemeLab is organized into **zones** — each zone showcases a different slice o
 |------|------|---------------|
 | Hero | `ZoneHero.tsx` | Intro banner |
 | Foundation | `ZoneFoundation.tsx` | Palette, typography, spacing |
-| Buttons | `ZoneButtons.tsx` | Button variants (motion, depth, shimmer, liquid, glitch, etc.) |
+| Buttons | `ZoneButtons.tsx` | Buttons and toggles (depth, progress, social, depth toggle) |
 | Inputs | `ZoneInputs.tsx` | Text inputs, selects, sliders, switches |
+| Controls | `ZoneControls.tsx` | Color picker, tag input, date range picker |
 | Navigation | `ZoneNavigation.tsx` | Tabs, breadcrumbs, pagination, steppers, sidebar |
 | Feedback | `ZoneFeedback.tsx` | Alerts, notifications, modals, skeletons |
+| DataDisplay | `ZoneDataDisplay.tsx` | Stat cards, timelines, tables, kanban, calendar |
+| Layout | `ZoneLayout.tsx` | Page header, split view, responsive grid |
 | Visual Effects | `ZoneVisualEffects.tsx` | Cards, backgrounds, text effects, borders |
+| Extras | `ZoneExtras.tsx` | Confetti, reveal on scroll, command palette |
 | Charts | `ZoneCharts.tsx` | ECharts visualizations |
-| Motion | `ZoneMotion.tsx` | Spring / keyframe animations |
+| Motion | `ZoneMotion.tsx` | Spring / keyframe animations, parallax, stagger |
 | Internals | `ZoneInternals.tsx` | Dev-facing tokens & contracts |
 
 Each zone has a matching `Zone*.module.css` file for zone-specific styling.
+
+**Current top-level tabs:** Foundation, Forms, Navigation, Feedback, Data & Charts, Effects, Internals.
 
 ## Import Path Patterns
 

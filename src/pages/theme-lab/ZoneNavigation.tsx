@@ -1,6 +1,7 @@
 import { useState } from "react";
 
-import { useThemeSnapshot } from "@infini-dev-kit/frontend/provider";
+import { useThemeSnapshot } from "../../providers/DemoThemeProvider";
+import { useT } from "../../i18n";
 import {
   AnimatedTabs,
   Marquee,
@@ -13,39 +14,6 @@ import styles from "./ZoneNavigation.module.css";
 import sharedStyles from "./shared.module.css";
 import layoutStyles from "./ThemeLab.module.css";
 
-const TAB_ITEMS = [
-  {
-    key: "overview",
-    label: "Overview",
-    content: (
-      <div>
-        <strong>Overview</strong>
-        <p>High-level summary of the current theme palette, radius, and shadow depth.</p>
-      </div>
-    ),
-  },
-  {
-    key: "tokens",
-    label: "Tokens",
-    content: (
-      <div>
-        <strong>Design Tokens</strong>
-        <p>Raw CSS variables that drive every visual property — color, motion, and spacing.</p>
-      </div>
-    ),
-  },
-  {
-    key: "usage",
-    label: "Usage",
-    content: (
-      <div>
-        <strong>Usage Notes</strong>
-        <p>Guidance on applying the Infini theme system to your own components and pages.</p>
-      </div>
-    ),
-  },
-];
-
 const SELECT_STEPPER_ITEMS = [
   { value: "xs", label: "XS" },
   { value: "sm", label: "SM" },
@@ -54,49 +22,80 @@ const SELECT_STEPPER_ITEMS = [
   { value: "xl", label: "XL" },
 ];
 
-const ACCORDION_ITEMS = [
-  {
-    key: "theme",
-    title: "Theme Foundations",
-    content:
-      "Core design foundations — color palette, radius scale, border styles, and shadow depth — that form the visual identity of every component.",
-  },
-  {
-    key: "motion",
-    title: "Motion Contracts",
-    content:
-      "Named timing and easing values (enter, exit, hover, press, overlay) that keep all animated components temporally consistent.",
-  },
-  {
-    key: "typography",
-    title: "Typography Scale",
-    content:
-      "Display and mono font stacks with matched weight and size scales. All heading and body text derives from these root tokens.",
-  },
-];
-
-const MARQUEE_KEYWORDS = [
-  "Infini Design System",
-  "Theme Tokens",
-  "Motion Contracts",
-  "Animated Tabs",
-  "Select Stepper",
-  "Pagination Flow",
-  "Accordion Panels",
-  "Full Motion Mode",
-];
-
 export function ZoneNavigation({ zoneIndex }: ZoneProps) {
   const { theme } = useThemeSnapshot();
+  const t = useT("theme-lab");
   const [page, setPage] = useState(3);
   const [stepperValue, setStepperValue] = useState("md");
+
+  const TAB_ITEMS = [
+    {
+      key: "overview",
+      label: t("nav.tabs.overview"),
+      content: (
+        <div>
+          <strong>{t("nav.tabs.overview")}</strong>
+          <p>{t("nav.tabs.overviewDesc")}</p>
+        </div>
+      ),
+    },
+    {
+      key: "tokens",
+      label: t("nav.tabs.tokens"),
+      content: (
+        <div>
+          <strong>{t("nav.tabs.tokensTitle")}</strong>
+          <p>{t("nav.tabs.tokensDesc")}</p>
+        </div>
+      ),
+    },
+    {
+      key: "usage",
+      label: t("nav.tabs.usage"),
+      content: (
+        <div>
+          <strong>{t("nav.tabs.usageTitle")}</strong>
+          <p>{t("nav.tabs.usageDesc")}</p>
+        </div>
+      ),
+    },
+  ];
+
+  const ACCORDION_ITEMS = [
+    {
+      key: "theme",
+      title: t("nav.accordion.themeTitle"),
+      content: t("nav.accordion.themeContent"),
+    },
+    {
+      key: "motion",
+      title: t("nav.accordion.motionTitle"),
+      content: t("nav.accordion.motionContent"),
+    },
+    {
+      key: "typography",
+      title: t("nav.accordion.typographyTitle"),
+      content: t("nav.accordion.typographyContent"),
+    },
+  ];
+
+  const MARQUEE_KEYWORDS = [
+    t("nav.marquee.designSystem"),
+    t("nav.marquee.themeTokens"),
+    t("nav.marquee.motionContracts"),
+    t("nav.marquee.animatedTabs"),
+    t("nav.marquee.selectStepper"),
+    t("nav.marquee.paginationFlow"),
+    t("nav.marquee.accordionPanels"),
+    t("nav.marquee.fullMotionMode"),
+  ];
 
   return (
     <section
       data-zone-index={zoneIndex}
       className={`${layoutStyles.zone} ${layoutStyles["theme-zone"]} zone-navigation stagger-in`}
     >
-      <div className={`${layoutStyles["zone-label"]} ambient-label`}>Navigation</div>
+      <div className={`${layoutStyles["zone-label"]} ambient-label`}>{t("zone.navigation")}</div>
 
       <section className={sharedStyles["theme-lab-section"]} aria-labelledby="section-nav-tabs">
         <h2 id="section-nav-tabs" className={`${sharedStyles["theme-lab-section-title"]} ambient-section-title`}>
@@ -116,11 +115,11 @@ export function ZoneNavigation({ zoneIndex }: ZoneProps) {
             onChange={setStepperValue}
           />
           <span style={{ fontFamily: theme.typography.en.mono, fontSize: 13, opacity: 0.6 }}>
-            Selected: {stepperValue}
+            {t("nav.stepper.selected")}: {stepperValue}
           </span>
         </div>
         <div className={sharedStyles["section-caption"]}>
-          Increment/decrement picker with keyboard support (Arrow keys). Loops through items.
+          {t("nav.stepper.caption")}
         </div>
       </section>
 
@@ -132,7 +131,7 @@ export function ZoneNavigation({ zoneIndex }: ZoneProps) {
           Mantine Pagination
         </h2>
         <Pagination value={page} onChange={setPage} total={10} withEdges />
-        <div className={sharedStyles["section-caption"]}>Page {page} of 10</div>
+        <div className={sharedStyles["section-caption"]}>{t("nav.pagination.page")} {page} {t("nav.pagination.of")} 10</div>
       </section>
 
       <section className={sharedStyles["theme-lab-section"]} aria-labelledby="section-nav-accordion">

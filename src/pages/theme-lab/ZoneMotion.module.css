@@ -336,6 +336,22 @@
   opacity: 0.55;
 }
 
+/* ── Motion Contracts Copy Cells ── */
+
+.motion-copy-cell {
+  cursor: pointer;
+  user-select: none;
+  transition: background-color var(--infini-motion-hover, 160ms) var(--infini-motion-easing, ease);
+}
+
+.motion-copy-cell:hover {
+  background: color-mix(in srgb, var(--infini-color-primary) 8%, transparent);
+}
+
+.motion-copy-cell-copied {
+  background: color-mix(in srgb, var(--infini-color-primary) 16%, transparent);
+}
+
 /* ── Motion Contracts Table (preserved from original) ── */
 
 .motion-table {
@@ -366,10 +382,18 @@
 
 .motion-bar {
   height: 4px;
+  width: 80px;
   background: var(--infini-color-primary);
   border-radius: 2px;
   opacity: 0.75;
-  transition: width var(--infini-motion-hover, 200ms) var(--infini-motion-easing, ease);
+  transform-origin: left;
+  transition: transform var(--infini-motion-hover, 200ms) var(--infini-motion-easing, ease);
+}
+
+/* ── Motion table responsive wrapper ── */
+.motion-table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 @media (max-width: 760px) {
@@ -383,6 +407,10 @@
 
   .parallax-scene {
     height: 110px;
+  }
+
+  .motion-table {
+    min-width: 480px;
   }
 }
 

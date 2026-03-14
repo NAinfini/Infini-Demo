@@ -95,13 +95,6 @@
   overflow: hidden;
 }
 
-/* ── Statistics ── */
-.stat-grid {
-  display: flex;
-  gap: 40px;
-  flex-wrap: wrap;
-}
-
 /* ── Responsive ── */
 @media (max-width: 760px) {
   .skeleton-grid {
@@ -117,10 +110,6 @@
   }
 
   .ticker-grid {
-    gap: 24px;
-  }
-
-  .stat-grid {
     gap: 24px;
   }
 }

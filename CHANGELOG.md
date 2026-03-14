@@ -8,8 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- ThemeLab page with 10 interactive zones showcasing the Infini Design System
-  - Hero, Foundation, Buttons, Inputs, Navigation, Feedback, Visual Effects, Charts, Motion, Internals
+- ThemeLab page with 14 interactive zones showcasing the Infini Design System
+  - Hero, Foundation, Buttons, Inputs, Controls, Navigation, Feedback, DataDisplay, Layout, Visual Effects, Extras, Charts, Motion, Internals
 - ApiLab page with live API testing interface and mock scenarios
 - Multi-theme switching with View Transition API support
 - Motion preference system (off / minimum / reduced / full)

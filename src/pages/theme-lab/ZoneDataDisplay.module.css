@@ -1,0 +1,26 @@
+.stat-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.timeline-wrap {
+  max-width: 480px;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.kanban-wrap {
+  overflow-x: auto;
+  min-height: 320px;
+}
+
+.calendar-wrap {
+  max-width: 360px;
+}
+
+.gallery-wrap {
+  max-width: 560px;
+}

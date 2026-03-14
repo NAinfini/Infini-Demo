@@ -5,9 +5,8 @@
   border: var(--infini-border-width, 1px) solid var(--infini-color-border);
   background: var(--infini-color-surface);
   box-shadow: var(--infini-shadow);
-  transition: transform var(--infini-motion-hover, 180ms) var(--infini-motion-easing, ease),
-    border-color var(--infini-motion-hover, 180ms) var(--infini-motion-easing, ease),
-    box-shadow var(--infini-motion-hover, 180ms) var(--infini-motion-easing, ease),
+  overflow: visible;
+  transition: border-color var(--infini-motion-hover, 180ms) var(--infini-motion-easing, ease),
     background-color var(--infini-motion-hover, 180ms) var(--infini-motion-easing, ease);
 }
 

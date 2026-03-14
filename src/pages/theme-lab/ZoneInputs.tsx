@@ -1,6 +1,7 @@
 import { useState } from "react";
 
-import { useThemeSnapshot } from "@infini-dev-kit/frontend/provider";
+import { useThemeSnapshot } from "../../providers/DemoThemeProvider";
+import { useT } from "../../i18n";
 import { GradientBorder } from "@infini-dev-kit/frontend/components";
 import { TextInput } from "@mantine/core";
 
@@ -11,6 +12,7 @@ import layoutStyles from "./ThemeLab.module.css";
 
 export function ZoneInputs({ zoneIndex }: ZoneProps) {
   const { theme } = useThemeSnapshot();
+  const t = useT("theme-lab");
 
   const [motionValue, setMotionValue] = useState("");
   const [motionErrorValue, setMotionErrorValue] = useState("bad@");
@@ -28,7 +30,7 @@ export function ZoneInputs({ zoneIndex }: ZoneProps) {
       data-zone-index={zoneIndex}
       className={`${layoutStyles.zone} ${layoutStyles["theme-zone"]} zone-inputs stagger-in`}
     >
-      <div className={`${layoutStyles["zone-label"]} ambient-label`}>Inputs & Forms</div>
+      <div className={`${layoutStyles["zone-label"]} ambient-label`}>{t("zone.inputs")}</div>
 
       <section className={sharedStyles["theme-lab-section"]} aria-labelledby="section-motion-input">
         <h2
@@ -40,36 +42,33 @@ export function ZoneInputs({ zoneIndex }: ZoneProps) {
 
         <div className={styles["input-grid"]}>
           <div className={styles["input-cell"]}>
-            <div className={styles["input-state-label"]}>Default</div>
-            <TextInput placeholder="Type something…" value={motionValue} onChange={(e) => setMotionValue(e.currentTarget.value)} />
+            <div className={styles["input-state-label"]}>{t("inputs.state.default")}</div>
+            <TextInput placeholder={t("inputs.placeholder.type")} value={motionValue} onChange={(e) => setMotionValue(e.currentTarget.value)} />
           </div>
 
           <div className={styles["input-cell"]}>
-            <div className={styles["input-state-label"]}>Error</div>
+            <div className={styles["input-state-label"]}>{t("inputs.state.error")}</div>
             <TextInput
               value={motionErrorValue}
               onChange={(e) => setMotionErrorValue(e.currentTarget.value)}
-              error="Invalid format"
-              placeholder="Invalid value"
+              error={t("inputs.error.invalidFormat")}
+              placeholder={t("inputs.placeholder.invalid")}
             />
-            <div className={styles["inline-error"]} style={{ color: theme.palette.danger }}>
-              Invalid format
-            </div>
           </div>
 
           <div className={styles["input-cell"]}>
-            <div className={styles["input-state-label"]}>Success</div>
-            <TextInput placeholder="Valid input" defaultValue="user@example.com" readOnly />
+            <div className={styles["input-state-label"]}>{t("inputs.state.success")}</div>
+            <TextInput placeholder={t("inputs.placeholder.valid")} defaultValue="user@example.com" readOnly />
           </div>
 
           <div className={styles["input-cell"]}>
-            <div className={styles["input-state-label"]}>Disabled</div>
-            <TextInput placeholder="Disabled" disabled />
+            <div className={styles["input-state-label"]}>{t("inputs.state.disabled")}</div>
+            <TextInput placeholder={t("inputs.placeholder.disabled")} disabled />
           </div>
         </div>
 
         <div className={sharedStyles["section-caption"]}>
-          Built with Mantine input primitives using theme CSS variables for consistent styling.
+          {t("inputs.mantine.caption")}
         </div>
       </section>
 
@@ -78,33 +77,33 @@ export function ZoneInputs({ zoneIndex }: ZoneProps) {
           id="section-floating-label"
           className={`${sharedStyles["theme-lab-section-title"]} ambient-section-title`}
         >
-          Label Variants
+          {t("inputs.float.title")}
         </h2>
 
         <div className={styles["input-grid"]}>
           <div className={styles["input-cell"]}>
-            <div className={styles["input-state-label"]}>Empty</div>
-            <TextInput label="Email address" placeholder="you@example.com" value={floatEmpty} onChange={(e) => setFloatEmpty(e.currentTarget.value)} />
+            <div className={styles["input-state-label"]}>{t("inputs.float.empty")}</div>
+            <TextInput label={t("inputs.label.email")} placeholder={t("inputs.placeholder.email")} value={floatEmpty} onChange={(e) => setFloatEmpty(e.currentTarget.value)} />
           </div>
 
           <div className={styles["input-cell"]}>
-            <div className={styles["input-state-label"]}>Filled</div>
-            <TextInput label="Full name" value={floatFilled} onChange={(e) => setFloatFilled(e.currentTarget.value)} />
+            <div className={styles["input-state-label"]}>{t("inputs.float.filled")}</div>
+            <TextInput label={t("inputs.label.fullName")} value={floatFilled} onChange={(e) => setFloatFilled(e.currentTarget.value)} />
           </div>
 
           <div className={styles["input-cell"]}>
-            <div className={styles["input-state-label"]}>Error</div>
+            <div className={styles["input-state-label"]}>{t("inputs.float.error")}</div>
             <TextInput
-              label="Email address"
+              label={t("inputs.label.email")}
               value={floatError}
               onChange={(e) => setFloatError(e.currentTarget.value)}
-              error="Please enter a valid email"
+              error={t("inputs.error.validEmail")}
             />
           </div>
 
           <div className={styles["input-cell"]}>
-            <div className={styles["input-state-label"]}>Infini style</div>
-            <TextInput label="Username" placeholder="your_handle" value={infiniFloat} onChange={(e) => setInfiniFloat(e.currentTarget.value)} />
+            <div className={styles["input-state-label"]}>{t("inputs.float.infini")}</div>
+            <TextInput label={t("inputs.label.username")} placeholder={t("inputs.placeholder.handle")} value={infiniFloat} onChange={(e) => setInfiniFloat(e.currentTarget.value)} />
           </div>
         </div>
       </section>
@@ -119,16 +118,17 @@ export function ZoneInputs({ zoneIndex }: ZoneProps) {
 
         <div className={styles["input-grid"]}>
           <div className={styles["input-cell"]}>
-            <div className={styles["input-state-label"]}>Static gradient</div>
+            <div className={styles["input-state-label"]}>{t("inputs.gradient.static")}</div>
             <GradientBorder animated={false}>
               <input
                 className={styles["bare-input"]}
+                aria-label={t("inputs.gradient.staticAria")}
                 style={{
                   background: "transparent",
                   color: theme.palette.text,
                   fontFamily: theme.typography.en.heading,
                 }}
-                placeholder="Static gradient border"
+                placeholder={t("inputs.gradient.staticPlaceholder")}
                 value={gradientValue}
                 onChange={(e) => setGradientValue(e.target.value)}
               />
@@ -136,33 +136,35 @@ export function ZoneInputs({ zoneIndex }: ZoneProps) {
           </div>
 
           <div className={styles["input-cell"]}>
-            <div className={styles["input-state-label"]}>Animated gradient</div>
+            <div className={styles["input-state-label"]}>{t("inputs.gradient.animated")}</div>
             <GradientBorder animated duration={4}>
               <input
                 className={styles["bare-input"]}
+                aria-label={t("inputs.gradient.animatedAria")}
                 style={{
                   background: "transparent",
                   color: theme.palette.text,
                   fontFamily: theme.typography.en.heading,
                 }}
-                placeholder="Rotating gradient border"
+                placeholder={t("inputs.gradient.animatedPlaceholder")}
                 readOnly
-                defaultValue="Focus me!"
+                defaultValue="Read-only demo"
               />
             </GradientBorder>
           </div>
 
           <div className={styles["input-cell"]}>
-            <div className={styles["input-state-label"]}>Infini defaults</div>
+            <div className={styles["input-state-label"]}>{t("inputs.gradient.infini")}</div>
             <GradientBorder>
               <input
                 className={styles["bare-input"]}
+                aria-label={t("inputs.gradient.infiniAria")}
                 style={{
                   background: "transparent",
                   color: theme.palette.text,
                   fontFamily: theme.typography.en.heading,
                 }}
-                placeholder="Infini gradient border"
+                placeholder={t("inputs.gradient.infiniPlaceholder")}
                 value={infiniGradientValue}
                 onChange={(e) => setInfiniGradientValue(e.target.value)}
               />
@@ -170,7 +172,7 @@ export function ZoneInputs({ zoneIndex }: ZoneProps) {
           </div>
 
           <div className={styles["input-cell"]}>
-            <div className={styles["input-state-label"]}>Custom colors</div>
+            <div className={styles["input-state-label"]}>{t("inputs.gradient.custom")}</div>
             <GradientBorder
               colors={[theme.palette.primary, theme.palette.accent, theme.palette.secondary, theme.palette.primary]}
               borderWidth={3}
@@ -178,12 +180,13 @@ export function ZoneInputs({ zoneIndex }: ZoneProps) {
             >
               <input
                 className={styles["bare-input"]}
+                aria-label={t("inputs.gradient.customAria")}
                 style={{
                   background: "transparent",
                   color: theme.palette.text,
                   fontFamily: theme.typography.en.heading,
                 }}
-                placeholder="Custom palette colors"
+                placeholder={t("inputs.gradient.customPlaceholder")}
                 readOnly
                 defaultValue="Theme-aware"
               />
@@ -192,9 +195,9 @@ export function ZoneInputs({ zoneIndex }: ZoneProps) {
         </div>
 
         <div className={sharedStyles["section-caption"]}>
-          Gradient border cycles through{" "}
-          <code style={{ fontFamily: theme.typography.en.mono }}>primary → accent → secondary</code> using a conic-gradient
-          mask. Border width: <code style={{ fontFamily: theme.typography.en.mono }}>2px</code> default, customisable.
+          {t("inputs.gradient.caption")}{" "}
+          <code style={{ fontFamily: theme.typography.en.mono }}>{t("inputs.gradient.captionColors")}</code> using a conic-gradient
+          mask. Border width: <code style={{ fontFamily: theme.typography.en.mono }}>{t("inputs.gradient.captionWidth")}</code> default, customisable.
         </div>
       </section>
     </section>

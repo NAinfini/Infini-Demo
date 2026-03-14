@@ -1,4 +1,5 @@
-import { useThemeSnapshot } from "@infini-dev-kit/frontend/provider";
+import { useThemeSnapshot } from "../../providers/DemoThemeProvider";
+import { useT } from "../../i18n";
 import { NumberTicker, Result, RingsProgress } from "@infini-dev-kit/frontend/components";
 import { Button, RingProgress, Skeleton, Tooltip } from "@mantine/core";
 import { modals } from "@mantine/modals";
@@ -15,13 +16,14 @@ function ring(value: number, color: string) {
 
 export function ZoneFeedback({ zoneIndex }: ZoneProps) {
   const { theme } = useThemeSnapshot();
+  const t = useT("theme-lab");
 
   return (
     <section
       data-zone-index={zoneIndex}
       className={`${layoutStyles.zone} ${layoutStyles["theme-zone"]} zone-feedback stagger-in`}
     >
-      <div className={`${layoutStyles["zone-label"]} ambient-label`}>Feedback &amp; Data</div>
+      <div className={`${layoutStyles["zone-label"]} ambient-label`}>{t("zone.feedback")}</div>
 
       <section className={sharedStyles["theme-lab-section"]} aria-labelledby="section-tooltips">
         <h2
@@ -31,26 +33,26 @@ export function ZoneFeedback({ zoneIndex }: ZoneProps) {
           Mantine Tooltip
         </h2>
         <div className={styles["tooltip-row"]}>
-          <Tooltip label="Appears above" position="top">
+          <Tooltip label={t("feedback.tooltip.top")} position="top">
             <button type="button" className={styles["demo-btn"]}>
-              Hover me (top)
+              {t("feedback.tooltip.hoverTop")}
             </button>
           </Tooltip>
 
-          <Tooltip label="Appears below" position="bottom">
+          <Tooltip label={t("feedback.tooltip.bottom")} position="bottom">
             <button type="button" className={styles["demo-btn"]}>
-              Hover me (bottom)
+              {t("feedback.tooltip.hoverBottom")}
             </button>
           </Tooltip>
 
-          <Tooltip label="Appears to the right" position="right">
+          <Tooltip label={t("feedback.tooltip.right")} position="right">
             <button type="button" className={styles["demo-btn"]}>
-              Hover me (right)
+              {t("feedback.tooltip.hoverRight")}
             </button>
           </Tooltip>
         </div>
         <div className={sharedStyles["section-caption"]}>
-          Mantine Tooltip positions: top / bottom / right.
+          {t("feedback.tooltip.caption")}
         </div>
       </section>
 
@@ -65,17 +67,17 @@ export function ZoneFeedback({ zoneIndex }: ZoneProps) {
           color="infini-danger"
           onClick={() =>
             modals.openConfirmModal({
-              title: "Delete this record?",
-              children: "This action cannot be undone. The record will be permanently removed from the system.",
+              title: t("feedback.modal.title"),
+              children: t("feedback.modal.body"),
               confirmProps: { color: "infini-danger" },
               centered: true,
             })
           }
         >
-          Delete record
+          {t("feedback.modal.deleteBtn")}
         </Button>
         <div className={sharedStyles["section-caption"]}>
-          Backdrop blur:{" "}
+          {t("feedback.modal.backdrop")}{" "}
           <code style={{ fontFamily: theme.typography.en.mono }}>{theme.overlays.modalBackdrop}</code>
         </div>
       </section>
@@ -91,34 +93,34 @@ export function ZoneFeedback({ zoneIndex }: ZoneProps) {
           <button
             type="button"
             className={styles["demo-btn"]}
-            onClick={() => notifications.show({ message: "Action completed.", color: "infini-success", title: "Success" })}
+            onClick={() => notifications.show({ message: t("feedback.toast.successMsg"), color: "infini-success", title: t("feedback.toast.successTitle") })}
           >
-            Success toast
+            {t("feedback.toast.successBtn")}
           </button>
           <button
             type="button"
             className={styles["demo-btn"]}
-            onClick={() => notifications.show({ message: "Something went wrong.", color: "infini-danger", title: "Error" })}
+            onClick={() => notifications.show({ message: t("feedback.toast.errorMsg"), color: "infini-danger", title: t("feedback.toast.errorTitle") })}
           >
-            Error toast
+            {t("feedback.toast.errorBtn")}
           </button>
           <button
             type="button"
             className={styles["demo-btn"]}
-            onClick={() => notifications.show({ message: "Check your connection.", color: "infini-warning", title: "Warning" })}
+            onClick={() => notifications.show({ message: t("feedback.toast.warningMsg"), color: "infini-warning", title: t("feedback.toast.warningTitle") })}
           >
-            Warning toast
+            {t("feedback.toast.warningBtn")}
           </button>
           <button
             type="button"
             className={styles["demo-btn"]}
-            onClick={() => notifications.show({ message: "New version available.", color: "infini-primary", title: "Update" })}
+            onClick={() => notifications.show({ message: t("feedback.toast.infoMsg"), color: "infini-primary", title: t("feedback.toast.infoTitle") })}
           >
-            Info toast
+            {t("feedback.toast.infoBtn")}
           </button>
         </div>
         <div className={sharedStyles["section-caption"]}>
-          Uses Mantine Notifications via InfiniProvider. Theme-aware colors.
+          {t("feedback.toast.caption")}
         </div>
       </section>
 
@@ -132,15 +134,15 @@ export function ZoneFeedback({ zoneIndex }: ZoneProps) {
         <div className={styles["ring-grid"]}>
           <div className={styles["ring-cell"]}>
             <RingProgress size={72} thickness={6} sections={ring(25, "infini-primary")} />
-            <span className={styles["ring-label"]}>Storage</span>
+            <span className={styles["ring-label"]}>{t("feedback.ring.storage")}</span>
           </div>
           <div className={styles["ring-cell"]}>
             <RingProgress size={88} thickness={7} sections={ring(65, "infini-success")} />
-            <span className={styles["ring-label"]}>Uptime</span>
+            <span className={styles["ring-label"]}>{t("feedback.ring.uptime")}</span>
           </div>
           <div className={styles["ring-cell"]}>
             <RingProgress size={104} thickness={8} sections={ring(92, "infini-warning")} />
-            <span className={styles["ring-label"]}>CPU</span>
+            <span className={styles["ring-label"]}>{t("feedback.ring.cpu")}</span>
           </div>
         </div>
       </section>
@@ -157,9 +159,9 @@ export function ZoneFeedback({ zoneIndex }: ZoneProps) {
             <RingsProgress
               size={120}
               rings={[
-                { value: 75, color: theme.palette.primary, tooltip: "CPU" },
-                { value: 55, color: theme.palette.accent, tooltip: "Memory" },
-                { value: 90, color: theme.palette.success, tooltip: "Disk" },
+                { value: 75, color: theme.palette.primary, tooltip: t("feedback.ring.cpu") },
+                { value: 55, color: theme.palette.accent, tooltip: t("feedback.ring.memory") },
+                { value: 90, color: theme.palette.success, tooltip: t("feedback.ring.disk") },
               ]}
             />
           </div>
@@ -168,14 +170,14 @@ export function ZoneFeedback({ zoneIndex }: ZoneProps) {
               size={100}
               thickness={5}
               rings={[
-                { value: 42, color: theme.palette.danger, tooltip: "Errors" },
-                { value: 88, color: theme.palette.warning, tooltip: "Latency" },
+                { value: 42, color: theme.palette.danger, tooltip: t("feedback.ring.errors") },
+                { value: 88, color: theme.palette.warning, tooltip: t("feedback.ring.latency") },
               ]}
             />
           </div>
         </div>
         <div className={sharedStyles["section-caption"]}>
-          Concentric animated rings — each section gets its own ring. Different from Mantine's single-ring RingProgress.
+          {t("feedback.rings.caption")}
         </div>
       </section>
 
@@ -189,7 +191,7 @@ export function ZoneFeedback({ zoneIndex }: ZoneProps) {
         <div className={styles["ticker-grid"]}>
           <div className={styles["ticker-cell"]}>
             <NumberTicker value={1234} duration={2} style={{ fontSize: 28 }} />
-            <span className={styles["ticker-label"]}>Active Users</span>
+            <span className={styles["ticker-label"]}>{t("feedback.ticker.activeUsers")}</span>
           </div>
           <div className={styles["ticker-cell"]}>
             <NumberTicker
@@ -199,7 +201,7 @@ export function ZoneFeedback({ zoneIndex }: ZoneProps) {
               duration={1.8}
               style={{ fontSize: 28 }}
             />
-            <span className={styles["ticker-label"]}>Accuracy</span>
+            <span className={styles["ticker-label"]}>{t("feedback.ticker.accuracy")}</span>
           </div>
           <div className={styles["ticker-cell"]}>
             <NumberTicker
@@ -208,7 +210,7 @@ export function ZoneFeedback({ zoneIndex }: ZoneProps) {
               duration={2.2}
               style={{ fontSize: 28 }}
             />
-            <span className={styles["ticker-label"]}>Revenue</span>
+            <span className={styles["ticker-label"]}>{t("feedback.ticker.revenue")}</span>
           </div>
         </div>
       </section>
@@ -222,17 +224,17 @@ export function ZoneFeedback({ zoneIndex }: ZoneProps) {
         </h2>
         <div className={styles["skeleton-grid"]}>
           <div>
-            <div className={styles["skeleton-sub-label"]}>Text</div>
+            <div className={styles["skeleton-sub-label"]}>{t("feedback.skeleton.text")}</div>
             <Skeleton height={12} mt={8} />
             <Skeleton height={12} mt={8} />
             <Skeleton height={12} mt={8} width="70%" />
           </div>
           <div>
-            <div className={styles["skeleton-sub-label"]}>Card</div>
+            <div className={styles["skeleton-sub-label"]}>{t("feedback.skeleton.card")}</div>
             <Skeleton height={96} mt={8} radius="md" />
           </div>
           <div>
-            <div className={styles["skeleton-sub-label"]}>Avatar</div>
+            <div className={styles["skeleton-sub-label"]}>{t("feedback.skeleton.avatar")}</div>
             <Skeleton height={56} width={56} mt={8} circle />
           </div>
         </div>
@@ -249,15 +251,15 @@ export function ZoneFeedback({ zoneIndex }: ZoneProps) {
           <div className={styles["result-card"]}>
             <Result
               status="success"
-              title="Payment confirmed"
-              subTitle="Your transaction has been processed successfully."
+              title={t("feedback.result.successTitle")}
+              subTitle={t("feedback.result.successSub")}
             />
           </div>
           <div className={styles["result-card"]}>
             <Result
               status="error"
-              title="Connection failed"
-              subTitle="Unable to reach the server. Please check your network and try again."
+              title={t("feedback.result.errorTitle")}
+              subTitle={t("feedback.result.errorSub")}
             />
           </div>
         </div>

@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 
-import { useThemeSnapshot } from "@infini-dev-kit/frontend/provider";
+import { useThemeSnapshot } from "../../providers/DemoThemeProvider";
+import { useT } from "../../i18n";
 import { contrastRatio, deriveHoverColor, pickReadableTextColor } from "@infini-dev-kit/utils/color";
 import { AnimatedCounter, GlowBorder, Terminal } from "@infini-dev-kit/frontend/components";
 
@@ -18,6 +19,7 @@ import layoutStyles from "./ThemeLab.module.css";
 
 export function ZoneFoundation({ zoneIndex }: ZoneProps) {
   const { theme } = useThemeSnapshot();
+  const t = useT("theme-lab");
   const [copiedColor, setCopiedColor] = useState<string | null>(null);
 
   const handleCopy = useCallback(async (value: string) => {
@@ -35,11 +37,11 @@ export function ZoneFoundation({ zoneIndex }: ZoneProps) {
   return (
     <section      data-zone-index={zoneIndex}
       className={`${layoutStyles.zone} ${layoutStyles["theme-zone"]} zone-foundation stagger-in`}    >
-      <div className={`${layoutStyles["zone-label"]} ambient-label`}>Foundation</div>
+      <div className={`${layoutStyles["zone-label"]} ambient-label`}>{t("zone.foundation")}</div>
       <div className={styles["zone-foundation-grid"]}>
         <section className={sharedStyles["theme-lab-section"]} aria-labelledby="section-palette">
           <h2 id="section-palette" className={`${sharedStyles["theme-lab-section-title"]} ambient-section-title`}>
-            Color Palette
+            {t("foundation.palette")}
           </h2>
           <div className={styles["palette-grid"]}>
             {PALETTE_KEYS.map((key) => {
@@ -55,7 +57,7 @@ export function ZoneFoundation({ zoneIndex }: ZoneProps) {
                       copiedColor === color ? styles["swatch-color-copied"] : ""
                     }`}
                     style={{ background: color, color: textColor }}
-                    title={`Click to copy ${color} | Hover: ${hover}`}
+                    title={t("foundation.copyTooltip").replace("{color}", color).replace("{hover}", hover)}
                     onClick={() => void handleCopy(color)}
                     onKeyDown={(event) => {
                       if (event.key === "Enter" || event.key === " ") {
@@ -69,7 +71,7 @@ export function ZoneFoundation({ zoneIndex }: ZoneProps) {
                     <div className={styles["swatch-topline"]}>
                       <span className={styles["swatch-label"]}>{key}</span>
                       <span className={styles["swatch-ratio"]}>
-                        {copiedColor === color ? "Copied" : `${ratio.toFixed(1)}:1`}
+                        {copiedColor === color ? t("foundation.copied") : `${ratio.toFixed(1)}:1`}
                       </span>
                     </div>
                     <div className={styles["swatch-hex"]}>{color}</div>
@@ -85,21 +87,21 @@ export function ZoneFoundation({ zoneIndex }: ZoneProps) {
 
         <section className={sharedStyles["theme-lab-section"]} aria-labelledby="section-type">
           <h2 id="section-type" className={`${sharedStyles["theme-lab-section-title"]} ambient-section-title`}>
-            Typography
+            {t("foundation.typography")}
           </h2>
           <div className={styles["type-scale"]}>
             {[
-              { label: "Display", font: theme.typography.en.heading, size: 32, weight: 700 },
-              { label: "H1", font: theme.typography.en.heading, size: 24, weight: 700 },
-              { label: "H2", font: theme.typography.en.heading, size: 20, weight: 600 },
-              { label: "Body", font: theme.typography.en.body, size: 15, weight: 400 },
-              { label: "Small", font: theme.typography.en.body, size: 13, weight: 400 },
-              { label: "Mono", font: theme.typography.en.mono, size: 13, weight: 400 },
+              { label: t("foundation.type.display"), font: theme.typography.en.heading, size: 32, weight: 700 },
+              { label: t("foundation.type.h1"), font: theme.typography.en.heading, size: 24, weight: 700 },
+              { label: t("foundation.type.h2"), font: theme.typography.en.heading, size: 20, weight: 600 },
+              { label: t("foundation.type.body"), font: theme.typography.en.body, size: 15, weight: 400 },
+              { label: t("foundation.type.small"), font: theme.typography.en.body, size: 13, weight: 400 },
+              { label: t("foundation.type.mono"), font: theme.typography.en.mono, size: 13, weight: 400 },
             ].map(({ label, font, size, weight }) => (
               <div key={label} className={styles["type-row"]}>
                 <span className={styles["type-meta"]}>{label}</span>
                 <span style={{ fontFamily: font, fontSize: size, fontWeight: weight, lineHeight: 1.2 }}>
-                  The quick brown fox - {font.split(",")[0]}
+                  {t("foundation.type.sample").replace("{font}", font.split(",")[0])}
                 </span>
               </div>
             ))}
@@ -111,24 +113,24 @@ export function ZoneFoundation({ zoneIndex }: ZoneProps) {
       <div className={styles["foundation-extras"]}>
         <section className={sharedStyles["theme-lab-section"]} aria-labelledby="section-counter">
           <h2 id="section-counter" className={`${sharedStyles["theme-lab-section-title"]} ambient-section-title`}>
-            Animated Counter
+            {t("foundation.counter")}
           </h2>
           <div className={styles["counter-row"]}>
             <GlowBorder>
               <div className={styles["counter-card"]}>
-                <span className={styles["counter-label"]}>Components</span>
+                <span className={styles["counter-label"]}>{t("foundation.counter.components")}</span>
                 <AnimatedCounter target={64} className={styles["counter-value"]} />
               </div>
             </GlowBorder>
             <GlowBorder>
               <div className={styles["counter-card"]}>
-                <span className={styles["counter-label"]}>Themes</span>
+                <span className={styles["counter-label"]}>{t("foundation.counter.themes")}</span>
                 <AnimatedCounter target={6} className={styles["counter-value"]} />
               </div>
             </GlowBorder>
             <GlowBorder>
               <div className={styles["counter-card"]}>
-                <span className={styles["counter-label"]}>Wrappers</span>
+                <span className={styles["counter-label"]}>{t("foundation.counter.wrappers")}</span>
                 <AnimatedCounter target={19} className={styles["counter-value"]} />
               </div>
             </GlowBorder>
@@ -137,7 +139,7 @@ export function ZoneFoundation({ zoneIndex }: ZoneProps) {
 
         <section className={sharedStyles["theme-lab-section"]} aria-labelledby="section-terminal">
           <h2 id="section-terminal" className={`${sharedStyles["theme-lab-section-title"]} ambient-section-title`}>
-            Terminal
+            {t("foundation.terminal")}
           </h2>
           <div className={styles["terminal-wrapper"]}>
             <Terminal

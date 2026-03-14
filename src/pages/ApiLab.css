@@ -1,4 +1,4 @@
-﻿.api-lab {
+.api-lab {
   padding: 24px;
   max-width: 1120px;
   margin: 0 auto;
@@ -27,7 +27,7 @@
 
 .api-lab-grid {
   display: grid;
-  grid-template-columns: minmax(280px, 1fr) minmax(420px, 1.4fr);
+  grid-template-columns: minmax(280px, 1fr) minmax(380px, 1.4fr);
   gap: 16px;
 }
 
@@ -120,11 +120,11 @@
 }
 
 .api-lab-coverage-chip.included {
-  background: color-mix(in srgb, #16a34a 16%, transparent);
+  background: color-mix(in srgb, var(--infini-color-success, #16a34a) 16%, transparent);
 }
 
 .api-lab-coverage-chip.missing {
-  background: color-mix(in srgb, #ca8a04 22%, transparent);
+  background: color-mix(in srgb, var(--infini-color-warning, #ca8a04) 22%, transparent);
 }
 
 .api-lab-user-id {
@@ -182,11 +182,11 @@
 }
 
 .api-lab-log-entry.ok {
-  box-shadow: 0 0 0 1px color-mix(in srgb, #16a34a 30%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--infini-color-success, #16a34a) 30%, transparent);
 }
 
 .api-lab-log-entry.err {
-  box-shadow: 0 0 0 1px color-mix(in srgb, #dc2626 35%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--infini-color-danger, #dc2626) 35%, transparent);
 }
 
 .api-lab-log-line {
@@ -203,7 +203,7 @@
 
 .api-lab-log-detail {
   margin-top: 6px;
-  font-family: var(--infini-font-body);
+  font-family: var(--infini-font-mono, monospace);
   font-size: 12px;
   line-height: 1.4;
   opacity: 0.82;
@@ -221,7 +221,7 @@
   font-family: var(--infini-font-display);
 }
 
-@media (max-width: 920px) {
+@media (max-width: 720px) {
   .api-lab {
     padding: 12px;
   }
@@ -234,4 +234,3 @@
     min-height: 420px;
   }
 }
-

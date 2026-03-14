@@ -4,6 +4,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 16px;
+  overflow: visible;
 }
 
 /* Individual variant card inside the grid */
@@ -13,9 +14,10 @@
   gap: 10px;
   padding: 14px 16px;
   border-radius: var(--infini-radius, 6px);
-  border: var(--infini-border-width, 1px) solid
-    color-mix(in srgb, var(--infini-color-border) 60%, transparent);
-  background: color-mix(in srgb, var(--infini-color-surface) 60%, transparent);
+  border: var(--infini-border-width, 1px) solid var(--infini-color-border);
+  border-color: color-mix(in srgb, var(--infini-color-border) 60%, var(--infini-color-surface));
+  background: color-mix(in srgb, var(--infini-color-surface) 60%, var(--infini-color-background, inherit));
+  overflow: visible;
   transition:
     border-color var(--infini-motion-hover, 180ms) var(--infini-motion-easing, ease),
     background-color var(--infini-motion-hover, 180ms) var(--infini-motion-easing, ease);
@@ -42,6 +44,26 @@
   flex-wrap: wrap;
   gap: 8px;
   align-items: center;
+  overflow: visible;
+}
+
+/* Collapsible editor wrapper */
+.editor-details {
+  border: none;
+}
+
+.editor-details > .editor-summary {
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+}
+
+.editor-details > .editor-summary::-webkit-details-marker {
+  display: none;
+}
+
+.editor-details > .editor-summary::marker {
+  content: "";
 }
 
 /* Minimal trigger button for the fakePress demo */
@@ -64,7 +86,7 @@
 
 .demo-trigger:hover {
   opacity: 1;
-  background: color-mix(in srgb, var(--infini-color-border) 20%, transparent);
+  background: color-mix(in srgb, var(--infini-color-border) 20%, var(--infini-color-surface));
 }
 
 /* ── Responsive ─────────────────────────────────────────────────────────── */
